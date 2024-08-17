@@ -1,12 +1,12 @@
-# Niên luận Cơ sở/Chuyên ngành CTXXX
+# Niên luận Cơ sở CT271
 
-**Học kỳ**: X, **Năm học**: 20XX-20XX
+**Học kỳ**: 1, **Năm học**: 2024-2025
 
-**MSSV**: X
+**MSSV**: B2111810
 
-**Họ tên**: X
+**Họ tên**: Lê Phương Nam
 
-**Tên đề tài**: X
+**Tên đề tài**: Xây dựng website tìm kiếm việc làm freelance
 
 ---
 
