@@ -1,4 +1,4 @@
-package vn.dencooper.fracejob.domain.dto.request;
+package vn.dencooper.fracejob.domain.dto.request.user;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -16,14 +16,7 @@ import vn.dencooper.fracejob.utils.constant.GenderEnum;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserCreationRequest {
-    @NotNull
-    @Email(message = "Email không hợp lệ", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
-    String email;
-
-    @NotNull
-    @Size(min = 6, message = "Mật khẩu phải có tối thiểu 6 kí tự")
-    String password;
+public class UserUpdationResquest {
 
     @NotNull
     @Size(min = 3, message = "Tên phải có tối thiểu 6 kí tự")

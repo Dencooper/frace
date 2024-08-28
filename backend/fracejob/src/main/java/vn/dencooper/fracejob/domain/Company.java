@@ -2,42 +2,41 @@ package vn.dencooper.fracejob.domain;
 
 import java.time.Instant;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import vn.dencooper.fracejob.utils.constant.GenderEnum;
 
 @Entity
-@Table(name = "users")
-@Setter
+@Table(name = "companies")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
+public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    String email;
-    String password;
-    String fullName;
-    int age;
-    GenderEnum gender;
+
+    @NotBlank(message = "Tên công ty không được để trống")
+    String name;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
+    String description;
+
     String address;
-    String refreshToken;
+    String logo;
+
     Instant createdAt;
     Instant updatedAt;
     String createdBy;

@@ -1,7 +1,8 @@
-package vn.dencooper.fracejob.domain.dto.request;
+package vn.dencooper.fracejob.domain.dto.request.user;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -15,9 +16,17 @@ import vn.dencooper.fracejob.utils.constant.GenderEnum;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserUpdationResquest {
+public class UserCreationRequest {
     @NotNull
-    @Size(min = 3, message = "Tên phải có tối thiểu 6 kí tự")
+    @Email(message = "EMAIL_INVALID", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+    String email;
+
+    @NotNull
+    @Size(min = 6, message = "PASSWORD_INVALID")
+    String password;
+
+    @NotNull
+    @Size(min = 3, message = "FULLNAME_INVALID")
     String fullName;
 
     int age;

@@ -14,7 +14,9 @@ public enum ErrorCode {
     EMAIL_EXISTED(400, "Email đã tổn tại"),
     EMAIL_INVALID(400, "Email không hợp lệ"),
     PASSWORD_INVALID(400, "Mật khẩu phải có tối thiểu 6 kí tự"),
-    FULLNAME_INVALID(400, "Họ tên phải có tối thiếu 3 kí tự");
+    FULLNAME_INVALID(400, "Họ tên phải có tối thiếu 3 kí tự"),
+    USER_NOTFOUND(400, "Không tìm thấy người dùng"),
+    ;
 
     private int code;
     private String message;

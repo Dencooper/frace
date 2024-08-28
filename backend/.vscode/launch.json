@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-FracejobApplication<fracejob>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "vn.dencooper.fracejob.FracejobApplication",
+            "projectName": "fracejob",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

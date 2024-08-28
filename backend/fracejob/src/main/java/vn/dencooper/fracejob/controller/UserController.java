@@ -19,12 +19,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.User;
-import vn.dencooper.fracejob.domain.dto.ApiResponse;
-import vn.dencooper.fracejob.domain.dto.request.UserCreationRequest;
-import vn.dencooper.fracejob.domain.dto.request.UserUpdationResquest;
+import vn.dencooper.fracejob.domain.dto.request.user.UserCreationRequest;
+import vn.dencooper.fracejob.domain.dto.request.user.UserUpdationResquest;
 import vn.dencooper.fracejob.domain.dto.response.UserResponse;
 import vn.dencooper.fracejob.mapper.UserMapper;
 import vn.dencooper.fracejob.service.UserService;
+import vn.dencooper.fracejob.utils.annotation.ApiMessage;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -36,45 +36,42 @@ public class UserController {
     UserMapper userMapper;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserResponse>> createUser(@Valid @RequestBody UserCreationRequest request) {
+    @ApiMessage("Create User")
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserCreationRequest request) {
         String hashPassword = passwordEncoder.encode(request.getPassword());
         request.setPassword(hashPassword);
-        User newUser = userService.handleCreateUser(request);
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setData(userMapper.toUserResponse(newUser));
-        apiResponse.setStatusCode(201);
-        apiResponse.setMessage("Created User Successfully!");
-        return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+        User user = userService.handleCreateUser(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toUserResponse(user));
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable("id") long id) {
-        return userService.fetchUserById(id);
+    @ApiMessage("Fetch User By ID")
+    public ResponseEntity<UserResponse> getUser(@PathVariable("id") long id) {
+        User user = userService.fetchUserById(id);
+        return ResponseEntity.ok().body(userMapper.toUserResponse(user));
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.fetchAllUsers();
+    @ApiMessage("Fetch All Users")
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
+        List<User> users = userService.fetchAllUsers();
+        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toListUsersResponse(users));
     }
 
-    @PutMapping
-    public ResponseEntity<ApiResponse<UserResponse>> updateUser(@Valid @RequestBody UserUpdationResquest resquest) {
-        User updatedUser = userService.handleUpdateUser(resquest);
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setData(userMapper.toUserResponse(updatedUser));
-        apiResponse.setStatusCode(200);
-        apiResponse.setMessage("Updated User Successfully!");
-        return ResponseEntity.ok().body(apiResponse);
+    @PutMapping("/{id}")
+    @ApiMessage("Update User")
+    public ResponseEntity<UserResponse> updateUser(@PathVariable("id") long id,
+            @Valid @RequestBody UserUpdationResquest request) {
+        User user = userService.handleUpdateUser(id, request);
+        return ResponseEntity.ok().body(userMapper.toUserResponse(user));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable("id") long id) {
+    @ApiMessage("Delete User")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") long id) {
         User user = userService.fetchUserById(id);
         userService.handleDeleteUser(user);
-        ApiResponse<Void> apiResponse = new ApiResponse<>();
-        apiResponse.setStatusCode(200);
-        apiResponse.setMessage("Delete User Successfully!");
-        return ResponseEntity.ok().body(apiResponse);
+        return ResponseEntity.ok().body(null);
     }
 
 }
