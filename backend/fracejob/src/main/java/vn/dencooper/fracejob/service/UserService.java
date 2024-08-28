@@ -2,12 +2,16 @@ package vn.dencooper.fracejob.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.User;
+import vn.dencooper.fracejob.domain.dto.PaginationResponse;
 import vn.dencooper.fracejob.domain.dto.request.user.UserCreationRequest;
 import vn.dencooper.fracejob.domain.dto.request.user.UserUpdationResquest;
 import vn.dencooper.fracejob.exception.AppException;
@@ -34,8 +38,17 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 
-    public List<User> fetchAllUsers() {
-        return userRepository.findAll();
+    public PaginationResponse fetchAllUsers(Specification<User> spec, Pageable pageable) {
+        Page<User> pageUsers = userRepository.findAll(spec, pageable);
+
+        PaginationResponse paginationResponse = new PaginationResponse();
+        paginationResponse.setPage(pageable.getPageNumber() + 1);
+        paginationResponse.setPageSize(pageable.getPageSize());
+        paginationResponse.setTotalPages(pageUsers.getTotalPages());
+        paginationResponse.setTotalItems(pageUsers.getTotalElements());
+        paginationResponse.setResutl(userMapper.toListUsersResponse(pageUsers.getContent()));
+
+        return paginationResponse;
     }
 
     public User handleUpdateUser(long id, UserUpdationResquest request) {
