@@ -2,18 +2,14 @@ package vn.dencooper.fracejob.service;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.User;
-import vn.dencooper.fracejob.domain.dto.ApiResponse;
 import vn.dencooper.fracejob.domain.dto.request.user.UserCreationRequest;
 import vn.dencooper.fracejob.domain.dto.request.user.UserUpdationResquest;
-import vn.dencooper.fracejob.domain.dto.response.UserResponse;
 import vn.dencooper.fracejob.exception.AppException;
 import vn.dencooper.fracejob.exception.ErrorCode;
 import vn.dencooper.fracejob.mapper.UserMapper;
@@ -45,11 +41,12 @@ public class UserService {
     public User handleUpdateUser(long id, UserUpdationResquest request) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
         userMapper.updateUser(user, request);
-        return this.userRepository.save(user);
+        return userRepository.save(user);
     }
 
-    public void handleDeleteUser(User user) {
-        this.userRepository.delete(user);
+    public void handleDeleteUser(long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+        userRepository.delete(user);
     }
 
     public boolean IsExistedUserByEmail(String email) {

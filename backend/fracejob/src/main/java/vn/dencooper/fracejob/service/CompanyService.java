@@ -1,16 +1,16 @@
 package vn.dencooper.fracejob.service;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+import java.util.List;
 
-import jakarta.validation.Valid;
+import org.springframework.stereotype.Service;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.Company;
-import vn.dencooper.fracejob.domain.dto.ApiResponse;
+import vn.dencooper.fracejob.exception.AppException;
+import vn.dencooper.fracejob.exception.ErrorCode;
+import vn.dencooper.fracejob.mapper.CompanyMapper;
 import vn.dencooper.fracejob.repository.CompanyRepository;
 
 @Service
@@ -18,13 +18,30 @@ import vn.dencooper.fracejob.repository.CompanyRepository;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CompanyService {
     CompanyRepository companyRepository;
+    CompanyMapper companyMapper;
 
-    public ResponseEntity<ApiResponse<Company>> handleCreateCompany(@Valid @RequestBody Company request) {
-        Company company = companyRepository.save(request);
-        ApiResponse<Company> apiResponse = new ApiResponse<>();
-        apiResponse.setStatusCode(201);
-        apiResponse.setMessage("Create Company Successfully!");
-        apiResponse.setData(company);
-        return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+    public Company handleCreateCompany(Company request) {
+        return companyRepository.save(request);
+    }
+
+    public Company fetchCompanyById(long id) {
+        return companyRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COMPANY_NOTFOUND));
+    }
+
+    public List<Company> fetchAllCompany() {
+        return companyRepository.findAll();
+    }
+
+    public Company handleUpdateCompany(long id, Company request) {
+        Company company = companyRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.COMPANY_NOTFOUND));
+        companyMapper.toCompany(company, request);
+        return companyRepository.save(company);
+    }
+
+    public void handleDeleteCompany(long id) {
+        Company company = companyRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.COMPANY_NOTFOUND));
+        companyRepository.delete(company);
     }
 }
