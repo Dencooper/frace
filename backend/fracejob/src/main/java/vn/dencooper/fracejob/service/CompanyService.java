@@ -2,12 +2,16 @@ package vn.dencooper.fracejob.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.Company;
+import vn.dencooper.fracejob.domain.dto.PaginationResponse;
 import vn.dencooper.fracejob.exception.AppException;
 import vn.dencooper.fracejob.exception.ErrorCode;
 import vn.dencooper.fracejob.mapper.CompanyMapper;
@@ -28,8 +32,20 @@ public class CompanyService {
         return companyRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COMPANY_NOTFOUND));
     }
 
-    public List<Company> fetchAllCompany() {
-        return companyRepository.findAll();
+    public PaginationResponse fetchAllCompany(Specification<Company> spec, Pageable pageable) {
+        Page<Company> pageCompany = companyRepository.findAll(spec, pageable);
+
+        if (pageCompany.getTotalElements() == 0) {
+            throw new AppException(ErrorCode.COMPANY_NOTFOUND);
+        }
+        PaginationResponse res = new PaginationResponse();
+        res.setPage(pageable.getPageNumber() + 1);
+        res.setPageSize(pageable.getPageSize());
+        res.setTotalPages(pageCompany.getTotalPages());
+        res.setTotalItems(pageCompany.getTotalElements());
+        res.setResutl(pageCompany.getContent());
+
+        return res;
     }
 
     public Company handleUpdateCompany(long id, Company request) {
