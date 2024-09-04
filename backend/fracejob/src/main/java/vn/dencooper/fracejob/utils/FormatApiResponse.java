@@ -1,4 +1,4 @@
-package vn.dencooper.fracejob.utils.constant;
+package vn.dencooper.fracejob.utils;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;

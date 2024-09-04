@@ -17,6 +17,7 @@ public enum ErrorCode {
     PASSWORD_INVALID(400, "Mật khẩu phải có tối thiểu 6 kí tự"),
     FULLNAME_INVALID(400, "Họ tên phải có tối thiếu 3 kí tự"),
     USER_NOTFOUND(400, "Không tìm thấy người dùng"),
+    BAD_CREDENTIAL(400, "Email hoặc mật khẩu không đúng"),
 
     COMPANY_NOTFOUND(400, "Không tìm thấy công ty"),
     ;

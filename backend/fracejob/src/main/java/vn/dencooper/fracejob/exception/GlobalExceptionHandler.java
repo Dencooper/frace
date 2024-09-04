@@ -1,6 +1,9 @@
 package vn.dencooper.fracejob.exception;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,7 +12,6 @@ import vn.dencooper.fracejob.domain.dto.ApiResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ApiResponse> handlingUncaseException(RuntimeException exception) {
         ApiResponse res = new ApiResponse<>();
@@ -17,6 +19,16 @@ public class GlobalExceptionHandler {
         res.setStatusCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
         res.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
 
+        return ResponseEntity.badRequest().body(res);
+    }
+
+    @ExceptionHandler(value = { InternalAuthenticationServiceException.class })
+    public ResponseEntity<ApiResponse> handlingBadCredentialsException(
+            InternalAuthenticationServiceException exception) {
+        ApiResponse res = new ApiResponse<>();
+        res.setError("true");
+        res.setStatusCode(ErrorCode.BAD_CREDENTIAL.getCode());
+        res.setMessage(ErrorCode.BAD_CREDENTIAL.getMessage());
         return ResponseEntity.badRequest().body(res);
     }
 

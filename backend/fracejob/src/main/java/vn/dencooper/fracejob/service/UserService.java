@@ -41,6 +41,10 @@ public class UserService {
     public PaginationResponse fetchAllUsers(Specification<User> spec, Pageable pageable) {
         Page<User> pageUsers = userRepository.findAll(spec, pageable);
 
+        if (pageUsers.getTotalElements() == 0) {
+            throw new AppException(ErrorCode.USER_NOTFOUND);
+        }
+
         PaginationResponse paginationResponse = new PaginationResponse();
         paginationResponse.setPage(pageable.getPageNumber() + 1);
         paginationResponse.setPageSize(pageable.getPageSize());
@@ -64,5 +68,9 @@ public class UserService {
 
     public boolean IsExistedUserByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    public User fetchUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 }
