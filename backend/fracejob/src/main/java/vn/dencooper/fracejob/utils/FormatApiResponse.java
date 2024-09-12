@@ -36,6 +36,9 @@ public class FormatApiResponse implements ResponseBodyAdvice<Object> {
         ApiResponse<Object> res = new ApiResponse<Object>();
         res.setStatusCode(status);
 
+        if (body instanceof String) {
+            return body;
+        }
         if (status >= 400) {
             return body;
         } else {

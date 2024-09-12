@@ -18,6 +18,8 @@ public enum ErrorCode {
     FULLNAME_INVALID(400, "Họ tên phải có tối thiếu 3 kí tự"),
     USER_NOTFOUND(400, "Không tìm thấy người dùng"),
     BAD_CREDENTIAL(400, "Email hoặc mật khẩu không đúng"),
+    MISSING_COOKIE(400, "Cookie không được truyền vào header"),
+    REFRESH_TOKEN_INVALID(400, "Refresh Token không hợp lệ"),
 
     COMPANY_NOTFOUND(400, "Không tìm thấy công ty"),
     ;

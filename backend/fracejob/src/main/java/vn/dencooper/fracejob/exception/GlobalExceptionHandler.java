@@ -5,6 +5,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -59,6 +60,16 @@ public class GlobalExceptionHandler {
         res.setError("true");
         res.setStatusCode(errorCode.getCode());
         res.setMessage(errorCode.getMessage());
+        return ResponseEntity.badRequest().body(res);
+    }
+
+    @ExceptionHandler(value = { MissingRequestCookieException.class })
+    public ResponseEntity<ApiResponse> handlingMissingRequestCookieException(
+            MissingRequestCookieException exception) {
+        ApiResponse res = new ApiResponse<>();
+        res.setError("true");
+        res.setStatusCode(ErrorCode.MISSING_COOKIE.getCode());
+        res.setMessage(ErrorCode.MISSING_COOKIE.getMessage());
         return ResponseEntity.badRequest().body(res);
     }
 

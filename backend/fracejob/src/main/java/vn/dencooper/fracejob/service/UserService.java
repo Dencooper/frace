@@ -1,7 +1,5 @@
 package vn.dencooper.fracejob.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -72,5 +70,16 @@ public class UserService {
 
     public User fetchUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+    }
+
+    public void updateRefreshToken(String email, String refreshToken) {
+        User user = this.fetchUserByEmail(email);
+        user.setRefreshToken(refreshToken);
+        this.userRepository.save(user);
+    }
+
+    public User fetchUserByRefreshAndEmail(String refresh_token, String email) {
+        return userRepository.findByRefreshTokenAndEmail(refresh_token, email)
+                .orElseThrow(() -> new AppException(ErrorCode.REFRESH_TOKEN_INVALID));
     }
 }

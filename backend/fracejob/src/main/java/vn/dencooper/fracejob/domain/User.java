@@ -2,6 +2,7 @@ package vn.dencooper.fracejob.domain;
 
 import java.time.Instant;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -37,7 +38,10 @@ public class User {
     int age;
     GenderEnum gender;
     String address;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
     String refreshToken;
+
     Instant createdAt;
     Instant updatedAt;
     String createdBy;
