@@ -23,6 +23,7 @@ import lombok.experimental.NonFinal;
 import vn.dencooper.fracejob.domain.User;
 import vn.dencooper.fracejob.domain.dto.request.LoginRequest;
 import vn.dencooper.fracejob.domain.dto.response.LoginResponse;
+import vn.dencooper.fracejob.domain.dto.response.UserLoginReponse;
 import vn.dencooper.fracejob.service.UserService;
 import vn.dencooper.fracejob.utils.JwtUtil;
 import vn.dencooper.fracejob.utils.annotation.ApiMessage;
@@ -52,12 +53,15 @@ public class AuthController {
 
                 User currrentUser = userService.fetchUserByEmail(request.getUsername());
                 LoginResponse res = new LoginResponse();
-                LoginResponse.UserLogin userLogin = res.new UserLogin(currrentUser.getId(), currrentUser.getEmail(),
-                                currrentUser.getFullName());
+                UserLoginReponse userLogin = UserLoginReponse.builder()
+                                .id(currrentUser.getId())
+                                .email(currrentUser.getEmail())
+                                .fullName(currrentUser.getFullName())
+                                .build();
 
                 String access_token = jwtUtil.createAccessToken(authentication.getName(), userLogin);
 
-                res.setAccess_token(access_token);
+                res.setAccessToken(access_token);
                 res.setUser(userLogin);
 
                 String refresh_token = jwtUtil.createRefreshToken(request.getUsername(), userLogin);
@@ -75,6 +79,22 @@ public class AuthController {
                                 .body(res);
         }
 
+        @GetMapping("/account")
+        @ApiMessage("Get account")
+        public ResponseEntity<LoginResponse> fetchAccount() {
+                String email = jwtUtil.getCurrentUserLogin().isPresent() ? jwtUtil.getCurrentUserLogin().get() : "";
+                User currrentUser = userService.fetchUserByEmail(email);
+                LoginResponse res = new LoginResponse();
+                UserLoginReponse userLogin = UserLoginReponse.builder()
+                                .id(currrentUser.getId())
+                                .email(currrentUser.getEmail())
+                                .fullName(currrentUser.getFullName())
+                                .build();
+                res.setUser(userLogin);
+                return ResponseEntity.ok().body(res);
+
+        }
+
         @GetMapping("/refresh")
         @ApiMessage("Get account by refresh")
         public ResponseEntity<LoginResponse> fetchAccountByRefresh(
@@ -83,12 +103,14 @@ public class AuthController {
                 String email = decodedToken.getSubject();
                 User currrentUser = userService.fetchUserByRefreshAndEmail(refresh_token, email);
                 LoginResponse res = new LoginResponse();
-                LoginResponse.UserLogin userLogin = res.new UserLogin(currrentUser.getId(), currrentUser.getEmail(),
-                                currrentUser.getFullName());
-
+                UserLoginReponse userLogin = UserLoginReponse.builder()
+                                .id(currrentUser.getId())
+                                .email(currrentUser.getEmail())
+                                .fullName(currrentUser.getFullName())
+                                .build();
                 String access_token = jwtUtil.createAccessToken(email, userLogin);
 
-                res.setAccess_token(access_token);
+                res.setAccessToken(access_token);
                 res.setUser(userLogin);
 
                 String new_refresh_token = jwtUtil.createRefreshToken(email, userLogin);
@@ -105,5 +127,24 @@ public class AuthController {
                                 .header(HttpHeaders.SET_COOKIE, resCookie.toString())
                                 .body(res);
 
+        }
+
+        @GetMapping("/logout")
+        @ApiMessage("Logout")
+        public ResponseEntity<Void> logout() {
+                String email = jwtUtil.getCurrentUserLogin().get();
+                User currrentUser = userService.fetchUserByEmail(email);
+                currrentUser.setRefreshToken("");
+                userService.updateRefreshToken(email, null);
+                ResponseCookie deleteCookie = ResponseCookie.from("refresh_token", null)
+                                .httpOnly(true)
+                                .secure(true)
+                                .path("/")
+                                .maxAge(0)
+                                .build();
+
+                return ResponseEntity.ok()
+                                .header(HttpHeaders.SET_COOKIE, deleteCookie.toString())
+                                .body(null);
         }
 }

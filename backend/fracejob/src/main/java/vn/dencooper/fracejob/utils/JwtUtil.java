@@ -28,8 +28,7 @@ import com.nimbusds.jose.util.Base64;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import vn.dencooper.fracejob.domain.dto.response.LoginResponse;
-import vn.dencooper.fracejob.domain.dto.response.LoginResponse.UserLogin;
+import vn.dencooper.fracejob.domain.dto.response.UserLoginReponse;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +47,7 @@ public class JwtUtil {
     @Value("${frace.jwt.refresh-token-validity-in-seconds}")
     long refreshTokenExpiration;
 
-    public String createAccessToken(String email, LoginResponse.UserLogin userLogin) {
+    public String createAccessToken(String email, UserLoginReponse userLogin) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
 
@@ -69,7 +68,7 @@ public class JwtUtil {
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
     }
 
-    public String createRefreshToken(String email, UserLogin userLogin) {
+    public String createRefreshToken(String email, UserLoginReponse userLogin) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
 
