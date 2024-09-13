@@ -1,5 +1,8 @@
 package vn.dencooper.fracejob.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -9,9 +12,11 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.User;
+import vn.dencooper.fracejob.domain.dto.Meta;
 import vn.dencooper.fracejob.domain.dto.PaginationResponse;
 import vn.dencooper.fracejob.domain.dto.request.user.UserCreationRequest;
 import vn.dencooper.fracejob.domain.dto.request.user.UserUpdationResquest;
+import vn.dencooper.fracejob.domain.dto.response.UserResponse;
 import vn.dencooper.fracejob.exception.AppException;
 import vn.dencooper.fracejob.exception.ErrorCode;
 import vn.dencooper.fracejob.mapper.UserMapper;
@@ -44,11 +49,14 @@ public class UserService {
         }
 
         PaginationResponse paginationResponse = new PaginationResponse();
-        paginationResponse.setPage(pageable.getPageNumber() + 1);
-        paginationResponse.setPageSize(pageable.getPageSize());
-        paginationResponse.setTotalPages(pageUsers.getTotalPages());
-        paginationResponse.setTotalItems(pageUsers.getTotalElements());
-        paginationResponse.setResutl(userMapper.toListUsersResponse(pageUsers.getContent()));
+        Meta meta = Meta.builder()
+                .current(pageable.getPageNumber() + 1)
+                .pageSize(pageable.getPageSize())
+                .pages(pageUsers.getTotalPages())
+                .total(pageUsers.getTotalElements())
+                .build();
+        paginationResponse.setMeta(meta);
+        paginationResponse.setResult(userMapper.toListUsersResponse(pageUsers.getContent()));
 
         return paginationResponse;
     }

@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.Company;
+import vn.dencooper.fracejob.domain.dto.Meta;
 import vn.dencooper.fracejob.domain.dto.PaginationResponse;
 import vn.dencooper.fracejob.exception.AppException;
 import vn.dencooper.fracejob.exception.ErrorCode;
@@ -37,11 +38,14 @@ public class CompanyService {
             throw new AppException(ErrorCode.COMPANY_NOTFOUND);
         }
         PaginationResponse res = new PaginationResponse();
-        res.setPage(pageable.getPageNumber() + 1);
-        res.setPageSize(pageable.getPageSize());
-        res.setTotalPages(pageCompany.getTotalPages());
-        res.setTotalItems(pageCompany.getTotalElements());
-        res.setResutl(pageCompany.getContent());
+        Meta meta = Meta.builder()
+                .current(pageable.getPageNumber() + 1)
+                .pageSize(pageable.getPageSize())
+                .pages(pageCompany.getTotalPages())
+                .total(pageCompany.getTotalElements())
+                .build();
+        res.setMeta(meta);
+        res.setResult(pageCompany.getContent());
 
         return res;
     }

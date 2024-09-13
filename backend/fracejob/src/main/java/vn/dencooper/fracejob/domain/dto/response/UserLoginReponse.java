@@ -15,5 +15,5 @@ import lombok.experimental.FieldDefaults;
 public class UserLoginReponse {
     long id;
     String email;
-    String fullName;
+    String name;
 }

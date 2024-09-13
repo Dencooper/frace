@@ -20,7 +20,7 @@ public class UserUpdationResquest {
 
     @NotNull
     @Size(min = 3, message = "Tên phải có tối thiểu 6 kí tự")
-    String fullName;
+    String name;
 
     int age;
 

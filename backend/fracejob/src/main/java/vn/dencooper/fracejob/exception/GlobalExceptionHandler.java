@@ -1,9 +1,7 @@
 package vn.dencooper.fracejob.exception;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,7 +14,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ApiResponse> handlingUncaseException(RuntimeException exception) {
         ApiResponse res = new ApiResponse<>();
-        res.setError("true");
+        res.setError("true 1");
         res.setStatusCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
         res.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
 
@@ -27,7 +25,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse> handlingBadCredentialsException(
             InternalAuthenticationServiceException exception) {
         ApiResponse res = new ApiResponse<>();
-        res.setError("true");
+        res.setError("true 2");
         res.setStatusCode(ErrorCode.BAD_CREDENTIAL.getCode());
         res.setMessage(ErrorCode.BAD_CREDENTIAL.getMessage());
         return ResponseEntity.badRequest().body(res);
@@ -38,7 +36,7 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = exception.getErrorCode();
 
         ApiResponse res = new ApiResponse<>();
-        res.setError("true");
+        res.setError("true 3");
         res.setStatusCode(errorCode.getCode());
         res.setMessage(errorCode.getMessage());
         return ResponseEntity.badRequest().body(res);
@@ -57,7 +55,7 @@ public class GlobalExceptionHandler {
         }
 
         ApiResponse res = new ApiResponse<>();
-        res.setError("true");
+        res.setError("true 4");
         res.setStatusCode(errorCode.getCode());
         res.setMessage(errorCode.getMessage());
         return ResponseEntity.badRequest().body(res);
@@ -67,7 +65,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse> handlingMissingRequestCookieException(
             MissingRequestCookieException exception) {
         ApiResponse res = new ApiResponse<>();
-        res.setError("true");
+        res.setError("true 5");
         res.setStatusCode(ErrorCode.MISSING_COOKIE.getCode());
         res.setMessage(ErrorCode.MISSING_COOKIE.getMessage());
         return ResponseEntity.badRequest().body(res);

@@ -43,7 +43,6 @@ public class FormatApiResponse implements ResponseBodyAdvice<Object> {
             return body;
         } else {
             res.setData(body);
-            res.setError("false");
             ApiMessage message = returnType.getMethodAnnotation(ApiMessage.class);
             res.setMessage(message != null ? message.value() + " Successfully" : "CALL API SUCCESSFULLY");
         }

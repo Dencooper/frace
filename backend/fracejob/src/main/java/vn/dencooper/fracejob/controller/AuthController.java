@@ -56,7 +56,7 @@ public class AuthController {
                 UserLoginReponse userLogin = UserLoginReponse.builder()
                                 .id(currrentUser.getId())
                                 .email(currrentUser.getEmail())
-                                .fullName(currrentUser.getFullName())
+                                .name(currrentUser.getName())
                                 .build();
 
                 String access_token = jwtUtil.createAccessToken(authentication.getName(), userLogin);
@@ -88,7 +88,7 @@ public class AuthController {
                 UserLoginReponse userLogin = UserLoginReponse.builder()
                                 .id(currrentUser.getId())
                                 .email(currrentUser.getEmail())
-                                .fullName(currrentUser.getFullName())
+                                .name(currrentUser.getName())
                                 .build();
                 res.setUser(userLogin);
                 return ResponseEntity.ok().body(res);
@@ -106,7 +106,7 @@ public class AuthController {
                 UserLoginReponse userLogin = UserLoginReponse.builder()
                                 .id(currrentUser.getId())
                                 .email(currrentUser.getEmail())
-                                .fullName(currrentUser.getFullName())
+                                .name(currrentUser.getName())
                                 .build();
                 String access_token = jwtUtil.createAccessToken(email, userLogin);
 
@@ -129,7 +129,7 @@ public class AuthController {
 
         }
 
-        @GetMapping("/logout")
+        @PostMapping("/logout")
         @ApiMessage("Logout")
         public ResponseEntity<Void> logout() {
                 String email = jwtUtil.getCurrentUserLogin().get();

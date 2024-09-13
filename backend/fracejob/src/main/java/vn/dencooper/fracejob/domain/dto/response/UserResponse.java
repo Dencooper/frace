@@ -2,8 +2,6 @@ package vn.dencooper.fracejob.domain.dto.response;
 
 import java.time.Instant;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,20 +10,18 @@ import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.utils.constant.GenderEnum;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
     long id;
     String email;
-    String fullName;
-    int age;
-    @Enumerated(EnumType.STRING)
+    String name;
     GenderEnum gender;
     String address;
-    String refreshToken;
-    Instant createdAt;
+    int age;
     Instant updatedAt;
-    String createdBy;
+    Instant createdAt;
     String updatedBy;
+    String createdBy;
 }
