@@ -2,8 +2,6 @@ package vn.dencooper.fracejob.domain;
 
 import java.time.Instant;
 
-import org.apache.catalina.security.SecurityUtil;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,7 +31,6 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
-    @NotBlank(message = "Tên công ty không được để trống")
     String name;
 
     @Column(columnDefinition = "MEDIUMTEXT")

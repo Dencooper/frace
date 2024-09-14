@@ -12,10 +12,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.User;
-import vn.dencooper.fracejob.domain.dto.Meta;
-import vn.dencooper.fracejob.domain.dto.PaginationResponse;
 import vn.dencooper.fracejob.domain.dto.request.user.UserCreationRequest;
 import vn.dencooper.fracejob.domain.dto.request.user.UserUpdationResquest;
+import vn.dencooper.fracejob.domain.dto.response.Meta;
+import vn.dencooper.fracejob.domain.dto.response.PaginationResponse;
 import vn.dencooper.fracejob.domain.dto.response.UserResponse;
 import vn.dencooper.fracejob.exception.AppException;
 import vn.dencooper.fracejob.exception.ErrorCode;
@@ -43,7 +43,6 @@ public class UserService {
 
     public PaginationResponse fetchAllUsers(Specification<User> spec, Pageable pageable) {
         Page<User> pageUsers = userRepository.findAll(spec, pageable);
-
         if (pageUsers.getTotalElements() == 0) {
             throw new AppException(ErrorCode.USER_NOTFOUND);
         }
@@ -56,7 +55,10 @@ public class UserService {
                 .total(pageUsers.getTotalElements())
                 .build();
         paginationResponse.setMeta(meta);
-        paginationResponse.setResult(userMapper.toListUsersResponse(pageUsers.getContent()));
+        paginationResponse.setResult(pageUsers
+                .getContent()
+                .stream()
+                .map(userMapper::toUserResponse).toList());
 
         return paginationResponse;
     }

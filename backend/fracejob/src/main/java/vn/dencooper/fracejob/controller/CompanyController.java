@@ -13,7 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.Company;
 import vn.dencooper.fracejob.domain.User;
-import vn.dencooper.fracejob.domain.dto.PaginationResponse;
+import vn.dencooper.fracejob.domain.dto.request.company.CompanyCreationRequest;
+import vn.dencooper.fracejob.domain.dto.response.PaginationResponse;
 import vn.dencooper.fracejob.service.CompanyService;
 import vn.dencooper.fracejob.utils.annotation.ApiMessage;
 
@@ -37,7 +38,7 @@ public class CompanyController {
 
     @PostMapping
     @ApiMessage("Create Company")
-    public ResponseEntity<Company> createCompany(@Valid @RequestBody Company request) {
+    public ResponseEntity<Company> createCompany(@Valid @RequestBody CompanyCreationRequest request) {
         Company company = companyService.handleCreateCompany(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(company);
     }

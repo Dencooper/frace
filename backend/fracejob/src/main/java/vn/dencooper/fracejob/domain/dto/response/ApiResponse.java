@@ -1,4 +1,4 @@
-package vn.dencooper.fracejob.domain.dto;
+package vn.dencooper.fracejob.domain.dto.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

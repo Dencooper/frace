@@ -7,7 +7,7 @@ import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import vn.dencooper.fracejob.domain.dto.ApiResponse;
+import vn.dencooper.fracejob.domain.dto.response.ApiResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

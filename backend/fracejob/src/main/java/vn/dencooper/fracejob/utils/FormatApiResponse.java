@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import jakarta.servlet.http.HttpServletResponse;
-import vn.dencooper.fracejob.domain.dto.ApiResponse;
+import vn.dencooper.fracejob.domain.dto.response.ApiResponse;
 import vn.dencooper.fracejob.utils.annotation.ApiMessage;
 
 @ControllerAdvice

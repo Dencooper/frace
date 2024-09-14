@@ -9,8 +9,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.Company;
-import vn.dencooper.fracejob.domain.dto.Meta;
-import vn.dencooper.fracejob.domain.dto.PaginationResponse;
+import vn.dencooper.fracejob.domain.dto.request.company.CompanyCreationRequest;
+import vn.dencooper.fracejob.domain.dto.response.Meta;
+import vn.dencooper.fracejob.domain.dto.response.PaginationResponse;
 import vn.dencooper.fracejob.exception.AppException;
 import vn.dencooper.fracejob.exception.ErrorCode;
 import vn.dencooper.fracejob.mapper.CompanyMapper;
@@ -23,8 +24,9 @@ public class CompanyService {
     CompanyRepository companyRepository;
     CompanyMapper companyMapper;
 
-    public Company handleCreateCompany(Company request) {
-        return companyRepository.save(request);
+    public Company handleCreateCompany(CompanyCreationRequest request) {
+        Company company = companyMapper.toCompany(request);
+        return companyRepository.save(company);
     }
 
     public Company fetchCompanyById(long id) {
@@ -32,20 +34,20 @@ public class CompanyService {
     }
 
     public PaginationResponse fetchAllCompany(Specification<Company> spec, Pageable pageable) {
-        Page<Company> pageCompany = companyRepository.findAll(spec, pageable);
+        Page<Company> pageCompanies = companyRepository.findAll(spec, pageable);
 
-        if (pageCompany.getTotalElements() == 0) {
+        if (pageCompanies.getTotalElements() == 0) {
             throw new AppException(ErrorCode.COMPANY_NOTFOUND);
         }
         PaginationResponse res = new PaginationResponse();
         Meta meta = Meta.builder()
                 .current(pageable.getPageNumber() + 1)
                 .pageSize(pageable.getPageSize())
-                .pages(pageCompany.getTotalPages())
-                .total(pageCompany.getTotalElements())
+                .pages(pageCompanies.getTotalPages())
+                .total(pageCompanies.getTotalElements())
                 .build();
         res.setMeta(meta);
-        res.setResult(pageCompany.getContent());
+        res.setResult(pageCompanies.getContent());
 
         return res;
     }

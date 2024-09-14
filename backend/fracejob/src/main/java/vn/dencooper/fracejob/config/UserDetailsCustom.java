@@ -1,4 +1,4 @@
-package vn.dencooper.fracejob.service;
+package vn.dencooper.fracejob.config;
 
 import java.util.Collections;
 
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import vn.dencooper.fracejob.service.UserService;
 
 @Component("userDetailsService")
 @RequiredArgsConstructor
