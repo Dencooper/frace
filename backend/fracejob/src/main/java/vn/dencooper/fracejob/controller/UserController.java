@@ -44,14 +44,18 @@ public class UserController {
         String hashPassword = passwordEncoder.encode(request.getPassword());
         request.setPassword(hashPassword);
         User user = userService.handleCreateUser(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toUserResponse(user));
+        UserResponse res = userMapper.toUserResponse(user);
+        res.setCompany(userService.handleCompanyUser(user.getCompany()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
     @GetMapping("/{id}")
     @ApiMessage("Fetch User By ID")
     public ResponseEntity<UserResponse> getUser(@PathVariable("id") long id) {
         User user = userService.fetchUserById(id);
-        return ResponseEntity.ok().body(userMapper.toUserResponse(user));
+        UserResponse res = userMapper.toUserResponse(user);
+        res.setCompany(userService.handleCompanyUser(user.getCompany()));
+        return ResponseEntity.ok().body(res);
     }
 
     @GetMapping
@@ -68,7 +72,9 @@ public class UserController {
     public ResponseEntity<UserResponse> updateUser(@PathVariable("id") long id,
             @Valid @RequestBody UserUpdationResquest request) {
         User user = userService.handleUpdateUser(id, request);
-        return ResponseEntity.ok().body(userMapper.toUserResponse(user));
+        UserResponse res = userMapper.toUserResponse(user);
+        res.setCompany(userService.handleCompanyUser(user.getCompany()));
+        return ResponseEntity.ok().body(res);
     }
 
     @DeleteMapping("/{id}")

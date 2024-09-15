@@ -28,7 +28,7 @@ import com.nimbusds.jose.util.Base64;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import vn.dencooper.fracejob.domain.dto.response.UserLoginReponse;
+import vn.dencooper.fracejob.domain.dto.response.login.UserLoginReponse;
 
 @Service
 @RequiredArgsConstructor

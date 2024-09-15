@@ -1,6 +1,7 @@
 package vn.dencooper.fracejob.exception;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestCookieException;
@@ -21,11 +22,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(res);
     }
 
-    @ExceptionHandler(value = { InternalAuthenticationServiceException.class })
+    @ExceptionHandler(value = { BadCredentialsException.class })
     public ResponseEntity<ApiResponse> handlingBadCredentialsException(
-            InternalAuthenticationServiceException exception) {
+            BadCredentialsException exception) {
         ApiResponse res = new ApiResponse<>();
-        res.setError("true 2");
+        res.setError(ErrorCode.BAD_CREDENTIAL.getMessage());
         res.setStatusCode(ErrorCode.BAD_CREDENTIAL.getCode());
         res.setMessage(ErrorCode.BAD_CREDENTIAL.getMessage());
         return ResponseEntity.badRequest().body(res);

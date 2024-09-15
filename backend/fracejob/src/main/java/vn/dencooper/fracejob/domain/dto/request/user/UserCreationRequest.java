@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import vn.dencooper.fracejob.domain.Company;
 import vn.dencooper.fracejob.utils.constant.GenderEnum;
 
 @Data
@@ -35,4 +36,5 @@ public class UserCreationRequest {
     GenderEnum gender;
 
     String address;
+    Company company;
 }

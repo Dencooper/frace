@@ -1,16 +1,21 @@
 package vn.dencooper.fracejob.domain;
 
 import java.time.Instant;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +31,7 @@ import vn.dencooper.fracejob.utils.JwtUtil;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +49,10 @@ public class Company {
     Instant updatedAt;
     String createdBy;
     String updatedBy;
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    @JsonIgnore
+    List<User> users;
 
     @PrePersist
     public void handleBeforeCreate() {

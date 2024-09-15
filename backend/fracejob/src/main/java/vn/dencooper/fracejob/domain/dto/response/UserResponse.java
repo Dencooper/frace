@@ -2,11 +2,15 @@ package vn.dencooper.fracejob.domain.dto.response;
 
 import java.time.Instant;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import vn.dencooper.fracejob.domain.Company;
+import vn.dencooper.fracejob.domain.dto.response.user.CompanyUserResponse;
 import vn.dencooper.fracejob.utils.constant.GenderEnum;
 
 @Data
@@ -24,4 +28,5 @@ public class UserResponse {
     Instant createdAt;
     String updatedBy;
     String createdBy;
+    CompanyUserResponse company;
 }

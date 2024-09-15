@@ -1,7 +1,8 @@
-package vn.dencooper.fracejob.domain.dto.response;
+package vn.dencooper.fracejob.domain.dto.response.user;
+
+import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,14 +11,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class LoginResponse {
-
-    @JsonProperty("access_token")
-    String accessToken;
-
-    UserLoginReponse user;
+public class CompanyUserResponse {
+    long id;
+    String name;
 }
