@@ -69,7 +69,7 @@ public class CompanyController {
     @ApiMessage("Delete Company")
     public ResponseEntity<Void> deleteCompany(@PathVariable("id") long id) {
         companyService.handleDeleteCompany(id);
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.ok().body(null);
     }
 
 }

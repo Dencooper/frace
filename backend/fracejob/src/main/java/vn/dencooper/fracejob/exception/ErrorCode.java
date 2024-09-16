@@ -22,9 +22,12 @@ public enum ErrorCode {
     REFRESH_TOKEN_INVALID(400, "Refresh Token không hợp lệ"),
 
     COMPANY_NOTFOUND(400, "Không tìm thấy công ty"),
+
+    SKILL_NOTFOUND(400, "Không tìm thấy kĩ năng"),
+    NAME_EXISTED(400, "Kĩ năng đã tổn tại"),
     ;
 
     int code;
-    String message;
+    String error;
 
 }

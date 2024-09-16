@@ -15,10 +15,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ApiResponse> handlingUncaseException(RuntimeException exception) {
         ApiResponse res = new ApiResponse<>();
-        res.setError("true 1");
         res.setStatusCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
-        res.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
-
+        res.setError(ErrorCode.UNCATEGORIZED_EXCEPTION.getError());
+        res.setMessage("Internal Server Error");
         return ResponseEntity.badRequest().body(res);
     }
 
@@ -26,9 +25,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse> handlingBadCredentialsException(
             BadCredentialsException exception) {
         ApiResponse res = new ApiResponse<>();
-        res.setError(ErrorCode.BAD_CREDENTIAL.getMessage());
         res.setStatusCode(ErrorCode.BAD_CREDENTIAL.getCode());
-        res.setMessage(ErrorCode.BAD_CREDENTIAL.getMessage());
+        res.setError(ErrorCode.BAD_CREDENTIAL.getError());
+        res.setMessage(exception.getMessage());
         return ResponseEntity.badRequest().body(res);
     }
 
@@ -37,9 +36,9 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = exception.getErrorCode();
 
         ApiResponse res = new ApiResponse<>();
-        res.setError("true 3");
         res.setStatusCode(errorCode.getCode());
-        res.setMessage(errorCode.getMessage());
+        res.setError(errorCode.getError());
+        res.setMessage(errorCode.getCode() >= 500 ? "Internal Server Error" : "Bad Request");
         return ResponseEntity.badRequest().body(res);
     }
 
@@ -56,9 +55,9 @@ public class GlobalExceptionHandler {
         }
 
         ApiResponse res = new ApiResponse<>();
-        res.setError("true 4");
         res.setStatusCode(errorCode.getCode());
-        res.setMessage(errorCode.getMessage());
+        res.setError(errorCode.getError());
+        res.setMessage("Bad Request");
         return ResponseEntity.badRequest().body(res);
     }
 
@@ -66,9 +65,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse> handlingMissingRequestCookieException(
             MissingRequestCookieException exception) {
         ApiResponse res = new ApiResponse<>();
-        res.setError("true 5");
         res.setStatusCode(ErrorCode.MISSING_COOKIE.getCode());
-        res.setMessage(ErrorCode.MISSING_COOKIE.getMessage());
+        res.setError(ErrorCode.MISSING_COOKIE.getError());
+        res.setMessage(exception.getMessage());
+
         return ResponseEntity.badRequest().body(res);
     }
 
