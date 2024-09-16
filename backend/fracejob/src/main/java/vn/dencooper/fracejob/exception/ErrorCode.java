@@ -24,7 +24,9 @@ public enum ErrorCode {
     COMPANY_NOTFOUND(400, "Không tìm thấy công ty"),
 
     SKILL_NOTFOUND(400, "Không tìm thấy kĩ năng"),
-    NAME_EXISTED(400, "Kĩ năng đã tổn tại"),
+    SKILL_EXISTED(400, "Kĩ năng đã tổn tại"),
+
+    JOB_NOTFOUND(400, "Không tìm thấy công việc"),
     ;
 
     int code;
