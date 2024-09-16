@@ -59,11 +59,11 @@ public class SkillController {
         return ResponseEntity.ok().body(skills);
     }
 
-    // @DeleteMapping("/{id}")
-    // @ApiMessage("Delete a skill")
-    // public ResponseEntity<Void> deleteSkill(@PathVariable("id") long id){
-
-    // return ResponseEntity.ok().body(null);
-    // }
+    @DeleteMapping("/{id}")
+    @ApiMessage("Delete a skill")
+    public ResponseEntity<Void> deleteSkill(@PathVariable("id") long id) {
+        skillService.handleDeleteSkill(id);
+        return ResponseEntity.ok().body(null);
+    }
 
 }

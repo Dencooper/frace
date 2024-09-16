@@ -24,7 +24,7 @@ public class SkillService {
 
     public Skill handleCreateSkill(Skill req) throws AppException {
         if (req.getName() != null && skillRepository.existsByName(req.getName())) {
-            throw new AppException(ErrorCode.NAME_EXISTED);
+            throw new AppException(ErrorCode.SKILL_EXISTED);
         } else {
             return skillRepository.save(req);
         }
@@ -34,7 +34,7 @@ public class SkillService {
         Skill skill = skillRepository.findById(req.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.SKILL_NOTFOUND));
         if (skill.getName() != null && skillRepository.existsByName(req.getName())) {
-            throw new AppException(ErrorCode.NAME_EXISTED);
+            throw new AppException(ErrorCode.SKILL_EXISTED);
         }
         skill.setName(req.getName());
         return skillRepository.save(skill);
@@ -57,6 +57,13 @@ public class SkillService {
         res.setResult(pageSkills.getContent());
 
         return res;
+    }
+
+    public void handleDeleteSkill(long id) throws AppException {
+        Skill skill = skillRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SKILL_NOTFOUND));
+        skill.getJobs().forEach((job) -> job.getSkills().remove(skill));
+
+        this.skillRepository.delete(skill);
     }
 
 }
