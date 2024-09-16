@@ -1,4 +1,4 @@
-package vn.dencooper.fracejob.domain.dto.response;
+package vn.dencooper.fracejob.domain.dto.response.user;
 
 import java.time.Instant;
 
@@ -10,7 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.Company;
-import vn.dencooper.fracejob.domain.dto.response.user.CompanyUserResponse;
 import vn.dencooper.fracejob.utils.constant.GenderEnum;
 
 @Data

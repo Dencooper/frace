@@ -1,9 +1,5 @@
 package vn.dencooper.fracejob.domain.dto.response.user;
 
-import java.time.Instant;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;

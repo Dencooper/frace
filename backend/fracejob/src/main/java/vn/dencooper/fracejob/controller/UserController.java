@@ -24,7 +24,7 @@ import vn.dencooper.fracejob.domain.User;
 import vn.dencooper.fracejob.domain.dto.request.user.UserCreationRequest;
 import vn.dencooper.fracejob.domain.dto.request.user.UserUpdationResquest;
 import vn.dencooper.fracejob.domain.dto.response.PaginationResponse;
-import vn.dencooper.fracejob.domain.dto.response.UserResponse;
+import vn.dencooper.fracejob.domain.dto.response.user.UserResponse;
 import vn.dencooper.fracejob.mapper.UserMapper;
 import vn.dencooper.fracejob.service.UserService;
 import vn.dencooper.fracejob.utils.annotation.ApiMessage;
