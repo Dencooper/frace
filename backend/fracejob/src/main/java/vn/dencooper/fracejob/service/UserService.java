@@ -18,8 +18,8 @@ import vn.dencooper.fracejob.domain.dto.request.user.UserCreationRequest;
 import vn.dencooper.fracejob.domain.dto.request.user.UserUpdationResquest;
 import vn.dencooper.fracejob.domain.dto.response.Meta;
 import vn.dencooper.fracejob.domain.dto.response.PaginationResponse;
-import vn.dencooper.fracejob.domain.dto.response.UserResponse;
 import vn.dencooper.fracejob.domain.dto.response.user.CompanyUserResponse;
+import vn.dencooper.fracejob.domain.dto.response.user.UserResponse;
 import vn.dencooper.fracejob.exception.AppException;
 import vn.dencooper.fracejob.exception.ErrorCode;
 import vn.dencooper.fracejob.mapper.CompanyMapper;
@@ -56,9 +56,6 @@ public class UserService {
 
     public PaginationResponse fetchAllUsers(Specification<User> spec, Pageable pageable) {
         Page<User> pageUsers = userRepository.findAll(spec, pageable);
-        if (pageUsers.getTotalElements() == 0) {
-            throw new AppException(ErrorCode.USER_NOTFOUND);
-        }
 
         PaginationResponse paginationResponse = new PaginationResponse();
         Meta meta = Meta.builder()

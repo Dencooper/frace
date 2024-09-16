@@ -36,9 +36,6 @@ public class CompanyService {
     public PaginationResponse fetchAllCompany(Specification<Company> spec, Pageable pageable) {
         Page<Company> pageCompanies = companyRepository.findAll(spec, pageable);
 
-        if (pageCompanies.getTotalElements() == 0) {
-            throw new AppException(ErrorCode.COMPANY_NOTFOUND);
-        }
         PaginationResponse res = new PaginationResponse();
         Meta meta = Meta.builder()
                 .current(pageable.getPageNumber() + 1)
