@@ -18,7 +18,7 @@ public enum ErrorCode {
     NAME_INVALID(400, "Họ tên phải có tối thiếu 3 kí tự"),
     USER_NOTFOUND(400, "Không tìm thấy người dùng"),
     BAD_CREDENTIAL(400, "Email hoặc mật khẩu không đúng"),
-    MISSING_COOKIE(400, "Cookie không được truyền vào header"),
+    MISSING_COOKIE(400, "Cookie không được truyền"),
     REFRESH_TOKEN_INVALID(400, "Refresh Token không hợp lệ"),
 
     COMPANY_NOTFOUND(400, "Không tìm thấy công ty"),
@@ -27,6 +27,10 @@ public enum ErrorCode {
     SKILL_EXISTED(400, "Kĩ năng đã tổn tại"),
 
     JOB_NOTFOUND(400, "Không tìm thấy công việc"),
+
+    EMPTY_FILE(400, "File không được để trống"),
+    MAX_FILESIZE(400, "Đã vượt quá kích thước tải lên tối đa(50MB)"),
+    EXTENSIONS_FILE(400, "File phải có phần mở rộng thuộc [pdf, jpg, jpeg, png, doc, docx]"),
     ;
 
     int code;

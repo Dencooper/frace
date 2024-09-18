@@ -2,11 +2,11 @@ package vn.dencooper.fracejob.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import vn.dencooper.fracejob.domain.dto.response.ApiResponse;
 
@@ -68,6 +68,17 @@ public class GlobalExceptionHandler {
         res.setStatusCode(ErrorCode.MISSING_COOKIE.getCode());
         res.setError(ErrorCode.MISSING_COOKIE.getError());
         res.setMessage(exception.getMessage());
+
+        return ResponseEntity.badRequest().body(res);
+    }
+
+    @ExceptionHandler(value = { MaxUploadSizeExceededException.class })
+    public ResponseEntity<ApiResponse> handlingMaxUploadSizeExceededException(
+            MaxUploadSizeExceededException exception) {
+        ApiResponse res = new ApiResponse<>();
+        res.setStatusCode(ErrorCode.MAX_FILESIZE.getCode());
+        res.setError(ErrorCode.MAX_FILESIZE.getError());
+        res.setMessage("Bad Request");
 
         return ResponseEntity.badRequest().body(res);
     }
