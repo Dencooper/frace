@@ -82,7 +82,7 @@ public class AuthController {
         @GetMapping("/account")
         @ApiMessage("Get account")
         public ResponseEntity<LoginResponse> fetchAccount() {
-                String email = jwtUtil.getCurrentUserLogin().isPresent() ? jwtUtil.getCurrentUserLogin().get() : "";
+                String email = JwtUtil.getCurrentUserLogin().isPresent() ? JwtUtil.getCurrentUserLogin().get() : "";
                 User currrentUser = userService.fetchUserByEmail(email);
                 LoginResponse res = new LoginResponse();
                 UserLoginReponse userLogin = UserLoginReponse.builder()
@@ -132,11 +132,11 @@ public class AuthController {
         @PostMapping("/logout")
         @ApiMessage("Logout")
         public ResponseEntity<Void> logout() {
-                String email = jwtUtil.getCurrentUserLogin().get();
+                String email = JwtUtil.getCurrentUserLogin().get();
                 User currrentUser = userService.fetchUserByEmail(email);
                 currrentUser.setRefreshToken("");
                 userService.updateRefreshToken(email, null);
-                ResponseCookie deleteCookie = ResponseCookie.from("refresh_token", null)
+                ResponseCookie deleteCookie = ResponseCookie.from("refresh_token", "")
                                 .httpOnly(true)
                                 .secure(true)
                                 .path("/")

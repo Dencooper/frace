@@ -1,7 +1,5 @@
 package vn.dencooper.fracejob.controller;
 
-import java.util.List;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -22,7 +20,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.Job;
-import vn.dencooper.fracejob.domain.User;
 import vn.dencooper.fracejob.domain.dto.response.PaginationResponse;
 import vn.dencooper.fracejob.domain.dto.response.job.JobResponse;
 import vn.dencooper.fracejob.service.JobService;

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import vn.dencooper.fracejob.domain.Company;
 import vn.dencooper.fracejob.domain.Skill;
 import vn.dencooper.fracejob.domain.dto.response.Meta;
 import vn.dencooper.fracejob.domain.dto.response.PaginationResponse;

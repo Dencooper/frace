@@ -1,9 +1,6 @@
 package vn.dencooper.fracejob.service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,11 +12,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.Job;
-import vn.dencooper.fracejob.domain.User;
 import vn.dencooper.fracejob.domain.dto.response.Meta;
 import vn.dencooper.fracejob.domain.dto.response.PaginationResponse;
 import vn.dencooper.fracejob.domain.dto.response.job.JobResponse;
-import vn.dencooper.fracejob.domain.dto.response.user.UserResponse;
 import vn.dencooper.fracejob.exception.AppException;
 import vn.dencooper.fracejob.exception.ErrorCode;
 import vn.dencooper.fracejob.mapper.JobMapper;

@@ -1,11 +1,8 @@
 package vn.dencooper.fracejob.controller;
 
-import java.util.List;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,11 +19,9 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import vn.dencooper.fracejob.domain.Company;
 import vn.dencooper.fracejob.domain.Skill;
 import vn.dencooper.fracejob.domain.dto.response.PaginationResponse;
 import vn.dencooper.fracejob.exception.AppException;
-import vn.dencooper.fracejob.exception.ErrorCode;
 import vn.dencooper.fracejob.service.SkillService;
 import vn.dencooper.fracejob.utils.annotation.ApiMessage;
 
