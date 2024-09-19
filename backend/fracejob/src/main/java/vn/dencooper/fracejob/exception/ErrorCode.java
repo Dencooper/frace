@@ -31,6 +31,12 @@ public enum ErrorCode {
     EMPTY_FILE(400, "File không được để trống"),
     MAX_FILESIZE(400, "Đã vượt quá kích thước tải lên tối đa(50MB)"),
     EXTENSIONS_FILE(400, "File phải có phần mở rộng thuộc [pdf, jpg, jpeg, png, doc, docx]"),
+
+    EMAIL_NOTBLANK(400, "Email không được để trống"),
+    URL_NOTBLANK(400, "URL không được để trống"),
+    USERJOB_NOTEXISTED(400, "Người dùng hoặc công việc không tồn tại"),
+    RESUME_NOTEXISTED(400, "Resume không tồn tại"),
+    RESUME_NOTFOUND(400, "Không tìm thấy resume"),
     ;
 
     int code;

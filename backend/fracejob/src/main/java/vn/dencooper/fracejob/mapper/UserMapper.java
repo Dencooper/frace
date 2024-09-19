@@ -1,7 +1,5 @@
 package vn.dencooper.fracejob.mapper;
 
-import java.util.List;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
@@ -18,5 +16,4 @@ public interface UserMapper {
 
     UserResponse toUserResponse(User user);
 
-    List<UserResponse> toListUsersResponse(List<User> users);
 }

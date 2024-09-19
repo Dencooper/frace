@@ -1,24 +1,19 @@
 package vn.dencooper.fracejob.domain;
 
 import java.time.Instant;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,30 +21,28 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.utils.JwtUtil;
-import vn.dencooper.fracejob.utils.constant.GenderEnum;
+import vn.dencooper.fracejob.utils.constant.ResumeStateEnum;
 
 @Entity
-@Table(name = "users")
+@Table(name = "resumes")
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
+public class Resume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
+
+    @NotBlank(message = "EMAIL_NOTBLANK")
     String email;
-    String password;
-    String name;
-    int age;
+
+    @NotBlank(message = "URL_NOTBLANK")
+    String url;
 
     @Enumerated(EnumType.STRING)
-    GenderEnum gender;
-    String address;
-
-    @Column(columnDefinition = "MEDIUMTEXT")
-    String refreshToken;
+    ResumeStateEnum status;
 
     Instant createdAt;
     Instant updatedAt;
@@ -57,12 +50,12 @@ public class User {
     String updatedBy;
 
     @ManyToOne
-    @JoinColumn(name = "company_id")
-    Company company;
+    @JoinColumn(name = "user_id")
+    User user;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @JsonIgnore
-    List<Resume> resumes;
+    @ManyToOne
+    @JoinColumn(name = "job_id")
+    Job job;
 
     @PrePersist
     public void handleBeforeCreate() {
