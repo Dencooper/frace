@@ -49,6 +49,11 @@ public class ResumeSevice {
         return true;
     }
 
+    public Resume fetchById(long id) {
+        return resumeRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.RESUME_NOTEXISTED));
+    }
+
     public ResumeCreationResponse handleCreateResume(Resume req) throws AppException {
         boolean isExistUserAndJob = checkResumeExistByUserAndJob(req);
         if (!isExistUserAndJob) {
@@ -66,10 +71,12 @@ public class ResumeSevice {
         return resumeMapper.toResumeUpdationResponse(res);
     }
 
-    public ResumeFetchReponse fetchResumeById(long id) {
-        Resume resume = resumeRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.RESUME_NOTEXISTED));
+    public ResumeFetchReponse getResume(Resume resume) {
         ResumeFetchReponse res = resumeMapper.toResumeFetchReponse(resume);
+        if (resume.getJob().getCompany() != null) {
+            res.setCompanyName(resume.getJob().getCompany().getName());
+
+        }
         res.setUser(new ResumeFetchReponse.UserResume(resume.getUser().getId(), resume.getUser().getName()));
         res.setJob(new ResumeFetchReponse.JobResume(resume.getJob().getId(), resume.getJob().getName()));
         return res;
@@ -83,7 +90,7 @@ public class ResumeSevice {
         }
         PaginationResponse res = new PaginationResponse();
         Meta meta = Meta.builder()
-                .current(pageable.getPageNumber() + 1)
+                .page(pageable.getPageNumber() + 1)
                 .pageSize(pageable.getPageSize())
                 .pages(pageResumes.getTotalPages())
                 .total(pageResumes.getTotalElements())
@@ -92,14 +99,7 @@ public class ResumeSevice {
         res.setResult(pageResumes
                 .getContent()
                 .stream()
-                .map((resume) -> {
-                    ResumeFetchReponse resumeFetchReponse = resumeMapper.toResumeFetchReponse(resume);
-                    resumeFetchReponse.setUser(
-                            new ResumeFetchReponse.UserResume(resume.getUser().getId(), resume.getUser().getName()));
-                    resumeFetchReponse.setJob(
-                            new ResumeFetchReponse.JobResume(resume.getJob().getId(), resume.getJob().getName()));
-                    return resumeFetchReponse;
-                })
+                .map((resume) -> this.getResume(resume))
                 .toList());
 
         return res;

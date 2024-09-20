@@ -57,7 +57,7 @@ public class UserService {
 
         PaginationResponse paginationResponse = new PaginationResponse();
         Meta meta = Meta.builder()
-                .current(pageable.getPageNumber() + 1)
+                .page(pageable.getPageNumber() + 1)
                 .pageSize(pageable.getPageSize())
                 .pages(pageUsers.getTotalPages())
                 .total(pageUsers.getTotalElements())

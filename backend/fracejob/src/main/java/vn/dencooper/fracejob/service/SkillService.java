@@ -47,7 +47,7 @@ public class SkillService {
         }
         PaginationResponse res = new PaginationResponse();
         Meta meta = Meta.builder()
-                .current(pageable.getPageNumber() + 1)
+                .page(pageable.getPageNumber() + 1)
                 .pageSize(pageable.getPageSize())
                 .pages(pageSkills.getTotalPages())
                 .total(pageSkills.getTotalElements())

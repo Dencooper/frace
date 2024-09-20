@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class Meta {
-    int current;
+    int page;
     int pageSize;
     int pages;
     long total;

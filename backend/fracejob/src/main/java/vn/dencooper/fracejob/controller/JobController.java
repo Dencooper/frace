@@ -40,7 +40,7 @@ public class JobController {
 
     @GetMapping("/{id}")
     @ApiMessage("Get a job")
-    public ResponseEntity<JobResponse> getJob(@PathVariable("id") long id) {
+    public ResponseEntity<Job> getJob(@PathVariable("id") long id) {
         return ResponseEntity.ok().body(jobService.fetchJob(id));
     }
 

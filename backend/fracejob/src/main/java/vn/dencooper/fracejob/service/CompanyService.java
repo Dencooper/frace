@@ -38,7 +38,7 @@ public class CompanyService {
 
         PaginationResponse res = new PaginationResponse();
         Meta meta = Meta.builder()
-                .current(pageable.getPageNumber() + 1)
+                .page(pageable.getPageNumber() + 1)
                 .pageSize(pageable.getPageSize())
                 .pages(pageCompanies.getTotalPages())
                 .total(pageCompanies.getTotalElements())

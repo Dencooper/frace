@@ -28,6 +28,7 @@ public class ResumeFetchReponse {
     String createdBy;
     String updatedBy;
 
+    String companyName;
     UserResume user;
     JobResume job;
 

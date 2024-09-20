@@ -55,7 +55,8 @@ public class ResumeController {
     @GetMapping("/{id}")
     @ApiMessage("Get a resume by id")
     public ResponseEntity<ResumeFetchReponse> getResumeById(@PathVariable("id") long id) {
-        ResumeFetchReponse res = resumeSevice.fetchResumeById(id);
+        Resume resume = resumeSevice.fetchById(id);
+        ResumeFetchReponse res = resumeSevice.getResume(resume);
         return ResponseEntity.ok().body(res);
     }
 

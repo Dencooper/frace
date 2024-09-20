@@ -83,19 +83,8 @@ public class JobService {
         return res;
     }
 
-    public JobResponse fetchJob(@PathVariable("id") long id) throws AppException {
-        Job job = jobRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.JOB_NOTFOUND));
-        JobResponse res = jobMapper.toJobResponse(job);
-        if (job.getSkills() != null) {
-            List<String> skills = job.getSkills()
-                    .stream()
-                    .map(skill -> skill.getName())
-                    .toList();
-
-            res.setSkills(skills);
-        }
-
-        return res;
+    public Job fetchJob(@PathVariable("id") long id) throws AppException {
+        return jobRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.JOB_NOTFOUND));
     }
 
     public PaginationResponse fetchAllJobs(Specification<Job> spec, Pageable pageable) {
@@ -103,28 +92,13 @@ public class JobService {
 
         PaginationResponse paginationResponse = new PaginationResponse();
         Meta meta = Meta.builder()
-                .current(pageable.getPageNumber() + 1)
+                .page(pageable.getPageNumber() + 1)
                 .pageSize(pageable.getPageSize())
                 .pages(pageJobs.getTotalPages())
                 .total(pageJobs.getTotalElements())
                 .build();
         paginationResponse.setMeta(meta);
-        paginationResponse.setResult(pageJobs
-                .getContent()
-                .stream()
-                .map((job) -> {
-                    JobResponse res = jobMapper.toJobResponse(job);
-                    if (job.getSkills() != null) {
-                        List<String> skills = job.getSkills()
-                                .stream()
-                                .map(skill -> skill.getName())
-                                .toList();
-
-                        res.setSkills(skills);
-                    }
-                    return res;
-                })
-                .toList());
+        paginationResponse.setResult(pageJobs.getContent());
 
         return paginationResponse;
     }
