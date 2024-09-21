@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import vn.dencooper.fracejob.domain.User;
-import vn.dencooper.fracejob.domain.dto.request.LoginRequest;
+import vn.dencooper.fracejob.domain.dto.request.login.LoginRequest;
 import vn.dencooper.fracejob.domain.dto.response.login.LoginResponse;
 import vn.dencooper.fracejob.domain.dto.response.login.UserLoginReponse;
 import vn.dencooper.fracejob.service.UserService;

@@ -1,6 +1,7 @@
 package vn.dencooper.fracejob.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 import vn.dencooper.fracejob.domain.User;
@@ -12,8 +13,9 @@ import vn.dencooper.fracejob.domain.dto.response.user.UserResponse;
 public interface UserMapper {
     User toUser(UserCreationRequest request);
 
-    void updateUser(@MappingTarget User user, UserUpdationResquest request);
+    void toUser(@MappingTarget User user, UserUpdationResquest request);
 
+    @Mapping(source = "company", target = "company", ignore = true)
     UserResponse toUserResponse(User user);
 
 }

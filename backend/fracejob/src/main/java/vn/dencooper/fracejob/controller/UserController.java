@@ -25,7 +25,6 @@ import vn.dencooper.fracejob.domain.dto.request.user.UserCreationRequest;
 import vn.dencooper.fracejob.domain.dto.request.user.UserUpdationResquest;
 import vn.dencooper.fracejob.domain.dto.response.PaginationResponse;
 import vn.dencooper.fracejob.domain.dto.response.user.UserResponse;
-import vn.dencooper.fracejob.mapper.UserMapper;
 import vn.dencooper.fracejob.service.UserService;
 import vn.dencooper.fracejob.utils.annotation.ApiMessage;
 
@@ -36,25 +35,21 @@ import vn.dencooper.fracejob.utils.annotation.ApiMessage;
 public class UserController {
     UserService userService;
     PasswordEncoder passwordEncoder;
-    UserMapper userMapper;
 
     @PostMapping
     @ApiMessage("Create User")
-    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserCreationRequest request) {
-        String hashPassword = passwordEncoder.encode(request.getPassword());
-        request.setPassword(hashPassword);
-        User user = userService.handleCreateUser(request);
-        UserResponse res = userMapper.toUserResponse(user);
-        res.setCompany(userService.handleCompanyUser(user.getCompany()));
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserCreationRequest req) {
+        String hashPassword = passwordEncoder.encode(req.getPassword());
+        req.setPassword(hashPassword);
+
+        UserResponse res = userService.handleCreateUser(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
     @GetMapping("/{id}")
     @ApiMessage("Fetch User By ID")
     public ResponseEntity<UserResponse> getUser(@PathVariable("id") long id) {
-        User user = userService.fetchUserById(id);
-        UserResponse res = userMapper.toUserResponse(user);
-        res.setCompany(userService.handleCompanyUser(user.getCompany()));
+        UserResponse res = userService.fetchUserById(id);
         return ResponseEntity.ok().body(res);
     }
 
@@ -62,7 +57,6 @@ public class UserController {
     @ApiMessage("Fetch All Users")
     public ResponseEntity<PaginationResponse> getAllUsers(@Filter Specification<User> spec,
             Pageable pageable) {
-
         PaginationResponse users = userService.fetchAllUsers(spec, pageable);
         return ResponseEntity.ok().body(users);
     }
@@ -71,9 +65,7 @@ public class UserController {
     @ApiMessage("Update User")
     public ResponseEntity<UserResponse> updateUser(@PathVariable("id") long id,
             @Valid @RequestBody UserUpdationResquest request) {
-        User user = userService.handleUpdateUser(id, request);
-        UserResponse res = userMapper.toUserResponse(user);
-        res.setCompany(userService.handleCompanyUser(user.getCompany()));
+        UserResponse res = userService.handleUpdateUser(id, request);
         return ResponseEntity.ok().body(res);
     }
 

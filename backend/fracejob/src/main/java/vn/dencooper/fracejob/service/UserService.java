@@ -16,11 +16,10 @@ import vn.dencooper.fracejob.domain.dto.request.user.UserCreationRequest;
 import vn.dencooper.fracejob.domain.dto.request.user.UserUpdationResquest;
 import vn.dencooper.fracejob.domain.dto.response.Meta;
 import vn.dencooper.fracejob.domain.dto.response.PaginationResponse;
-import vn.dencooper.fracejob.domain.dto.response.user.CompanyUserResponse;
 import vn.dencooper.fracejob.domain.dto.response.user.UserResponse;
+import vn.dencooper.fracejob.domain.dto.response.user.UserResponse.CompanyUserResponse;
 import vn.dencooper.fracejob.exception.AppException;
 import vn.dencooper.fracejob.exception.ErrorCode;
-import vn.dencooper.fracejob.mapper.CompanyMapper;
 import vn.dencooper.fracejob.mapper.UserMapper;
 import vn.dencooper.fracejob.repository.CompanyRepository;
 import vn.dencooper.fracejob.repository.UserRepository;
@@ -32,24 +31,30 @@ public class UserService {
     UserRepository userRepository;
     UserMapper userMapper;
     CompanyRepository companyRepository;
-    CompanyMapper companyMapper;
 
-    public User handleCreateUser(UserCreationRequest request) {
+    public UserResponse handleCreateUser(UserCreationRequest request) {
         if (IsExistedUserByEmail(request.getEmail())) {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
-        // if (request.getCompany() != null) {
-        // Optional<Company> companyOptional =
-        // companyRepository.findById(request.getCompany().getId());
-        // request.setCompany(companyOptional.isPresent() ?
-        // companyMapper.toCompany(companyOptional.get()) : null);
-        // }
 
-        return userRepository.save(userMapper.toUser(request));
+        User user = userMapper.toUser(request);
+        user = userRepository.save(handleCompanyUser(user));
+
+        UserResponse res = userMapper.toUserResponse(user);
+        if (user.getCompany() != null) {
+            res.setCompany(new CompanyUserResponse(user.getCompany().getId(), user.getCompany().getName()));
+        }
+
+        return res;
     }
 
-    public User fetchUserById(long id) {
-        return userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+    public UserResponse fetchUserById(long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+        UserResponse res = userMapper.toUserResponse(user);
+        if (user.getCompany() != null) {
+            res.setCompany(new CompanyUserResponse(user.getCompany().getId(), user.getCompany().getName()));
+        }
+        return res;
     }
 
     public PaginationResponse fetchAllUsers(Specification<User> spec, Pageable pageable) {
@@ -68,7 +73,9 @@ public class UserService {
                 .stream()
                 .map((user) -> {
                     UserResponse res = userMapper.toUserResponse(user);
-                    res.setCompany(handleCompanyUser(user.getCompany()));
+                    if (user.getCompany() != null) {
+                        res.setCompany(new CompanyUserResponse(user.getCompany().getId(), user.getCompany().getName()));
+                    }
                     return res;
                 })
                 .toList());
@@ -76,10 +83,18 @@ public class UserService {
         return paginationResponse;
     }
 
-    public User handleUpdateUser(long id, UserUpdationResquest request) {
+    public UserResponse handleUpdateUser(long id, UserUpdationResquest request) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
-        userMapper.updateUser(user, request);
-        return userRepository.save(user);
+
+        userMapper.toUser(user, request);
+        user = userRepository.save(handleCompanyUser(user));
+
+        UserResponse res = userMapper.toUserResponse(user);
+        if (user.getCompany() != null) {
+            res.setCompany(new CompanyUserResponse(user.getCompany().getId(), user.getCompany().getName()));
+        }
+
+        return res;
     }
 
     public void handleDeleteUser(long id) {
@@ -106,14 +121,11 @@ public class UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.REFRESH_TOKEN_INVALID));
     }
 
-    public CompanyUserResponse handleCompanyUser(Company company) {
-        if (company != null) {
-            Optional<Company> companyOptional = companyRepository.findById(company.getId());
-            CompanyUserResponse companyUser = companyOptional.isPresent()
-                    ? companyMapper.toCompanyUser(companyOptional.get())
-                    : null;
-            return companyUser;
+    public User handleCompanyUser(User user) {
+        if (user.getCompany() != null) {
+            Optional<Company> companyOptional = companyRepository.findById(user.getCompany().getId());
+            user.setCompany(companyOptional.isPresent() ? companyOptional.get() : null);
         }
-        return null;
+        return user;
     }
 }

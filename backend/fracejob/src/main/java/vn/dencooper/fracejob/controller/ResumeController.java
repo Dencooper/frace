@@ -25,10 +25,7 @@ import vn.dencooper.fracejob.domain.dto.response.resume.ResumeCreationResponse;
 import vn.dencooper.fracejob.domain.dto.response.resume.ResumeFetchReponse;
 import vn.dencooper.fracejob.domain.dto.response.resume.ResumeUpdationResponse;
 import vn.dencooper.fracejob.exception.AppException;
-import vn.dencooper.fracejob.exception.ErrorCode;
-import vn.dencooper.fracejob.service.JobService;
 import vn.dencooper.fracejob.service.ResumeSevice;
-import vn.dencooper.fracejob.service.UserService;
 import vn.dencooper.fracejob.utils.annotation.ApiMessage;
 
 @RestController
