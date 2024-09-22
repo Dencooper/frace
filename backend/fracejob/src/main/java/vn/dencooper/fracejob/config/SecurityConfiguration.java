@@ -81,7 +81,7 @@ public class SecurityConfiguration {
                 "/api/v1/auth/login",
                 "/api/v1/auth/refresh",
                 "/storage/**",
-                "/api/v1/compaies/**",
+                "/api/v1/companies/**",
                 "/api/v1/jobs/**"
         };
         http

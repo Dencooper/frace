@@ -2,6 +2,7 @@ package vn.dencooper.fracejob.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,7 +28,17 @@ public class GlobalExceptionHandler {
         ApiResponse res = new ApiResponse<>();
         res.setStatusCode(ErrorCode.BAD_CREDENTIAL.getCode());
         res.setError(ErrorCode.BAD_CREDENTIAL.getError());
-        res.setMessage(exception.getMessage());
+        res.setMessage("Đăng nhập không thành công");
+        return ResponseEntity.badRequest().body(res);
+    }
+
+    @ExceptionHandler(value = { InternalAuthenticationServiceException.class })
+    public ResponseEntity<ApiResponse> handlingInternalAuthenticationServiceException(
+            InternalAuthenticationServiceException exception) {
+        ApiResponse res = new ApiResponse<>();
+        res.setStatusCode(ErrorCode.BAD_CREDENTIAL.getCode());
+        res.setError(ErrorCode.BAD_CREDENTIAL.getError());
+        res.setMessage("Đăng nhập không thành công");
         return ResponseEntity.badRequest().body(res);
     }
 
