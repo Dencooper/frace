@@ -30,7 +30,7 @@ const LoginPage = () => {
             window.location.href = '/';
         } else {
             notification.error({
-                message: "Có lỗi xảy ra",
+                message: res.error,
                 description:
                     res.message && Array.isArray(res.message) ? res.message[0] : res.message,
                 duration: 5

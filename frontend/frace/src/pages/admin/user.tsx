@@ -46,17 +46,15 @@ const UserPage = () => {
 
     const columns: ProColumns<IUser>[] = [
         {
-            title: 'Id',
+            title: 'ID',
             dataIndex: 'id',
             width: 100,
+            align: "center",
             render: (text, record, index, action) => {
                 return (
-                    <a href="#" onClick={() => {
-                        setOpenViewDetail(true);
-                        setDataInit(record);
-                    }}>
+                    <>
                         {record.id}
-                    </a>
+                    </>
                 )
             },
             hideInSearch: true,
@@ -196,7 +194,7 @@ const UserPage = () => {
                 scroll={{ x: true }}
                 pagination={
                     {
-                        current: meta.current,
+                        current: meta.page,
                         pageSize: meta.pageSize,
                         showSizeChanger: true,
                         total: meta.total,

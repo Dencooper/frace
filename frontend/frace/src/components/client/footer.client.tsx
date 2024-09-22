@@ -1,8 +1,6 @@
-
 const Footer = () => {
     return (
-        <footer>
-            <div>Frace</div>
+        <footer style={{ padding: 15, textAlign: "center" }}>
         </footer>
     )
 }
