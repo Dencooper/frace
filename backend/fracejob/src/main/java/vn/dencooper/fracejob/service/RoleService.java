@@ -44,8 +44,7 @@ public class RoleService {
     }
 
     public Role handleUpdateRole(@Valid @RequestBody Role req) throws AppException {
-        Role res = new Role();
-        res = roleRepository.findById(req.getId()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
+        Role res = fetchRoleById(req.getId());
         if (req.getPermissions() != null) {
             List<Long> listIdPermissions = req.getPermissions()
                     .stream()
@@ -55,6 +54,10 @@ public class RoleService {
         }
         roleMapper.toRole(req, res);
         return roleRepository.save(res);
+    }
+
+    public Role fetchRoleById(Long id) throws AppException {
+        return roleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
     }
 
     public PaginationResponse fetchAllRoles(

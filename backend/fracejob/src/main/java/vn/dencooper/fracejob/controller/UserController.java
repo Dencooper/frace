@@ -41,16 +41,13 @@ public class UserController {
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserCreationRequest req) {
         String hashPassword = passwordEncoder.encode(req.getPassword());
         req.setPassword(hashPassword);
-
-        UserResponse res = userService.handleCreateUser(req);
-        return ResponseEntity.status(HttpStatus.CREATED).body(res);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.handleCreateUser(req));
     }
 
     @GetMapping("/{id}")
     @ApiMessage("Fetch User By ID")
     public ResponseEntity<UserResponse> getUser(@PathVariable("id") long id) {
-        UserResponse res = userService.fetchUserById(id);
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok().body(userService.fetchUserById(id));
     }
 
     @GetMapping
@@ -65,8 +62,7 @@ public class UserController {
     @ApiMessage("Update User")
     public ResponseEntity<UserResponse> updateUser(@PathVariable("id") long id,
             @Valid @RequestBody UserUpdationResquest request) {
-        UserResponse res = userService.handleUpdateUser(id, request);
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok().body(userService.handleUpdateUser(id, request));
     }
 
     @DeleteMapping("/{id}")

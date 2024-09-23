@@ -2,17 +2,20 @@ package vn.dencooper.fracejob.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -22,8 +25,10 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import vn.dencooper.fracejob.domain.User;
 import vn.dencooper.fracejob.domain.dto.request.login.LoginRequest;
+import vn.dencooper.fracejob.domain.dto.request.user.UserCreationRequest;
 import vn.dencooper.fracejob.domain.dto.response.login.LoginResponse;
 import vn.dencooper.fracejob.domain.dto.response.login.LoginResponse.UserLoginReponse;
+import vn.dencooper.fracejob.domain.dto.response.user.UserResponse;
 import vn.dencooper.fracejob.service.UserService;
 import vn.dencooper.fracejob.utils.JwtUtil;
 import vn.dencooper.fracejob.utils.annotation.ApiMessage;
@@ -33,7 +38,7 @@ import vn.dencooper.fracejob.utils.annotation.ApiMessage;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthController {
-
+        PasswordEncoder passwordEncoder;
         AuthenticationManagerBuilder authenticationManagerBuilder;
         JwtUtil jwtUtil;
         UserService userService;
@@ -41,6 +46,15 @@ public class AuthController {
         @NonFinal
         @Value("${frace.jwt.refresh-token-validity-in-seconds}")
         long refreshTokenExpiration;
+
+        @PostMapping("/register")
+        @ApiMessage("Register")
+        public ResponseEntity<UserResponse> register(@Valid @RequestBody UserCreationRequest req) {
+                String hashPassword = passwordEncoder.encode(req.getPassword());
+                req.setPassword(hashPassword);
+                UserResponse res = userService.handleCreateUser(req);
+                return ResponseEntity.status(HttpStatus.CREATED).body(res);
+        }
 
         @PostMapping("/login")
         @ApiMessage("Login")

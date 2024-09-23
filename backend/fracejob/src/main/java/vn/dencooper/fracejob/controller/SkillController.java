@@ -35,15 +35,13 @@ public class SkillController {
     @PostMapping
     @ApiMessage("Create a skill")
     public ResponseEntity<Skill> createSkill(@Valid @RequestBody Skill req) {
-        Skill res = skillService.handleCreateSkill(req);
-        return ResponseEntity.status(HttpStatus.CREATED).body(res);
+        return ResponseEntity.status(HttpStatus.CREATED).body(skillService.handleCreateSkill(req));
     }
 
     @PutMapping
     @ApiMessage("Update a skill")
     public ResponseEntity<Skill> udpateSkill(@Valid @RequestBody Skill req) throws AppException {
-        Skill res = skillService.handleUpdateSkill(req);
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok().body(skillService.handleUpdateSkill(req));
     }
 
     @GetMapping

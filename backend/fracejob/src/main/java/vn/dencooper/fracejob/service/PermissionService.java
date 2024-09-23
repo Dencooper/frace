@@ -32,14 +32,17 @@ public class PermissionService {
     }
 
     public Permission handleUpdatePermission(Permission req) throws AppException {
-        Permission permission = new Permission();
-        permission = permissionRepository.findById(req.getId())
+        Permission permission = permissionRepository.findById(req.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOTFOUND));
+
         if (permissionRepository.existsByApiPathAndMethodAndModule(req.getApiPath(), req.getMethod(),
                 req.getModule())) {
-            throw new AppException(ErrorCode.PERMISSION_EXISTED);
+            if (permission.getName().equals(req.getName())) {
+                throw new AppException(ErrorCode.PERMISSION_EXISTED);
+            }
+            permissionMapper.toPermission(req, permission);
         }
-        permissionMapper.toPermission(req, permission);
+
         return permissionRepository.save(permission);
     }
 

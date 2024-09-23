@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.Role;
 import vn.dencooper.fracejob.domain.dto.response.PaginationResponse;
+import vn.dencooper.fracejob.exception.AppException;
 import vn.dencooper.fracejob.service.RoleService;
 import vn.dencooper.fracejob.utils.annotation.ApiMessage;
 
@@ -40,6 +42,12 @@ public class RoleController {
     @ApiMessage("Update a role")
     public ResponseEntity<Role> updateRole(@Valid @RequestBody Role req) {
         return ResponseEntity.ok().body(roleService.handleUpdateRole(req));
+    }
+
+    @GetMapping("/{id}")
+    @ApiMessage("Get role by id")
+    public ResponseEntity<Role> getRoleById(@PathVariable("id") long id) throws AppException {
+        return ResponseEntity.ok().body(roleService.fetchRoleById(id));
     }
 
     @GetMapping
