@@ -28,7 +28,9 @@ import com.nimbusds.jose.util.Base64;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import vn.dencooper.fracejob.domain.dto.response.login.UserLoginReponse;
+import vn.dencooper.fracejob.domain.dto.response.login.LoginResponse;
+import vn.dencooper.fracejob.domain.dto.response.login.LoginResponse.UserInnerToken;
+import vn.dencooper.fracejob.domain.dto.response.login.LoginResponse.UserLoginReponse;
 
 @Service
 @RequiredArgsConstructor
@@ -47,9 +49,14 @@ public class JwtUtil {
     @Value("${frace.jwt.refresh-token-validity-in-seconds}")
     long refreshTokenExpiration;
 
-    public String createAccessToken(String email, UserLoginReponse userLogin) {
+    public String createAccessToken(String email, LoginResponse loginResponse) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
+
+        UserInnerToken userToken = new UserInnerToken(
+                loginResponse.getUser().getId(),
+                loginResponse.getUser().getEmail(),
+                loginResponse.getUser().getName());
 
         List<String> listAuthority = new ArrayList<String>();
 
@@ -60,7 +67,7 @@ public class JwtUtil {
                 .issuedAt(now)
                 .expiresAt(validity)
                 .subject(email)
-                .claim("user", userLogin)
+                .claim("user", userToken)
                 .claim("permission", listAuthority)
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
@@ -68,15 +75,20 @@ public class JwtUtil {
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
     }
 
-    public String createRefreshToken(String email, UserLoginReponse userLogin) {
+    public String createRefreshToken(String email, LoginResponse loginResponse) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
+
+        UserInnerToken userToken = new UserInnerToken(
+                loginResponse.getUser().getId(),
+                loginResponse.getUser().getEmail(),
+                loginResponse.getUser().getName());
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(validity)
                 .subject(email)
-                .claim("user", userLogin)
+                .claim("user", userToken)
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
 

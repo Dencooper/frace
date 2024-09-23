@@ -16,6 +16,6 @@ public interface UserMapper {
     void toUser(@MappingTarget User user, UserUpdationResquest request);
 
     @Mapping(source = "company", target = "company", ignore = true)
+    @Mapping(source = "role", target = "role", ignore = true)
     UserResponse toUserResponse(User user);
-
 }

@@ -1,9 +1,15 @@
 package vn.dencooper.fracejob.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import com.turkraft.springfilter.converter.FilterSpecification;
+import com.turkraft.springfilter.converter.FilterSpecificationConverter;
+import com.turkraft.springfilter.parser.FilterParser;
+import com.turkraft.springfilter.parser.node.FilterNode;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +26,18 @@ import vn.dencooper.fracejob.mapper.ResumeMapper;
 import vn.dencooper.fracejob.repository.JobRepository;
 import vn.dencooper.fracejob.repository.ResumeRepository;
 import vn.dencooper.fracejob.repository.UserRepository;
+import vn.dencooper.fracejob.utils.JwtUtil;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ResumeSevice {
+    @Autowired
+    FilterParser filterParser;
+
+    @Autowired
+    FilterSpecificationConverter filterSpecificationConverter;
+
     ResumeRepository resumeRepository;
     UserRepository userRepository;
     JobRepository jobRepository;
@@ -106,6 +119,30 @@ public class ResumeSevice {
         Resume resume = resumeRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.RESUME_NOTEXISTED));
         resumeRepository.delete(resume);
+    }
+
+    public PaginationResponse fetchResumesByUser(Pageable pageable) {
+        String email = JwtUtil.getCurrentUserLogin().isPresent() ? JwtUtil.getCurrentUserLogin().get() : "";
+
+        FilterNode node = filterParser.parse("email='" + email + "'");
+        FilterSpecification<Resume> spec = filterSpecificationConverter.convert(node);
+        Page<Resume> pageResumes = resumeRepository.findAll(spec, pageable);
+
+        PaginationResponse res = new PaginationResponse();
+        Meta meta = Meta.builder()
+                .page(pageable.getPageNumber() + 1)
+                .pageSize(pageable.getPageSize())
+                .pages(pageResumes.getTotalPages())
+                .total(pageResumes.getTotalElements())
+                .build();
+        res.setMeta(meta);
+        res.setResult(pageResumes
+                .getContent()
+                .stream()
+                .map((resume) -> this.getResume(resume))
+                .toList());
+
+        return res;
     }
 
 }

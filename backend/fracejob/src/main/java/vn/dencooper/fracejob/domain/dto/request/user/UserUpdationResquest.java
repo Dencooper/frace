@@ -2,7 +2,6 @@ package vn.dencooper.fracejob.domain.dto.request.user;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -11,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.Company;
+import vn.dencooper.fracejob.domain.Role;
 import vn.dencooper.fracejob.utils.constant.GenderEnum;
 
 @Data
@@ -30,4 +30,5 @@ public class UserUpdationResquest {
 
     String address;
     Company company;
+    Role role;
 }

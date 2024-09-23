@@ -46,9 +46,6 @@ public class RoleService {
     public Role handleUpdateRole(@Valid @RequestBody Role req) throws AppException {
         Role res = new Role();
         res = roleRepository.findById(req.getId()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
-        if (roleRepository.existsByName(req.getName())) {
-            throw new AppException(ErrorCode.ROLE_EXISTED);
-        }
         if (req.getPermissions() != null) {
             List<Long> listIdPermissions = req.getPermissions()
                     .stream()

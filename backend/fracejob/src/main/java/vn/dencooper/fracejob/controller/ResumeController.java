@@ -38,23 +38,19 @@ public class ResumeController {
     @PostMapping
     @ApiMessage("Create a resume")
     public ResponseEntity<ResumeCreationResponse> createResume(@Valid @RequestBody Resume req) {
-        ResumeCreationResponse res = resumeSevice.handleCreateResume(req);
-        return ResponseEntity.status(HttpStatus.CREATED).body(res);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resumeSevice.handleCreateResume(req));
     }
 
     @PutMapping
     @ApiMessage("Update a resume")
     public ResponseEntity<ResumeUpdationResponse> updateResume(@RequestBody Resume req) throws AppException {
-        ResumeUpdationResponse res = resumeSevice.handleUpdateResume(req);
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok().body(resumeSevice.handleUpdateResume(req));
     }
 
     @GetMapping("/{id}")
     @ApiMessage("Get a resume by id")
     public ResponseEntity<ResumeFetchReponse> getResumeById(@PathVariable("id") long id) {
-        Resume resume = resumeSevice.fetchById(id);
-        ResumeFetchReponse res = resumeSevice.getResume(resume);
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok().body(resumeSevice.getResume(resumeSevice.fetchById(id)));
     }
 
     @GetMapping
@@ -62,8 +58,7 @@ public class ResumeController {
     public ResponseEntity<PaginationResponse> getAllResumes(
             @Filter Specification<Resume> spec,
             Pageable pageable) {
-        PaginationResponse res = resumeSevice.fetchAllResumes(spec, pageable);
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok().body(resumeSevice.fetchAllResumes(spec, pageable));
     }
 
     @DeleteMapping("/{id}")
@@ -71,6 +66,13 @@ public class ResumeController {
     public ResponseEntity<Void> deleteResume(@PathVariable("id") long id) {
         resumeSevice.handleDeleteResume(id);
         return ResponseEntity.ok().body(null);
+    }
+
+    @GetMapping("/by-user")
+    @ApiMessage("Get all resumes by user")
+    public ResponseEntity<PaginationResponse> getResumesByUser(
+            Pageable pageable) {
+        return ResponseEntity.ok().body(resumeSevice.fetchResumesByUser(pageable));
     }
 
 }

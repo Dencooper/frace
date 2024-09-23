@@ -25,12 +25,22 @@ public class UserResponse {
     String updatedBy;
     String createdBy;
     CompanyUserResponse company;
+    RoleUserResponse role;
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class CompanyUserResponse {
+        long id;
+        String name;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @FieldDefaults(level = AccessLevel.PRIVATE)
+    public static class RoleUserResponse {
         long id;
         String name;
     }

@@ -23,7 +23,7 @@ import lombok.experimental.NonFinal;
 import vn.dencooper.fracejob.domain.User;
 import vn.dencooper.fracejob.domain.dto.request.login.LoginRequest;
 import vn.dencooper.fracejob.domain.dto.response.login.LoginResponse;
-import vn.dencooper.fracejob.domain.dto.response.login.UserLoginReponse;
+import vn.dencooper.fracejob.domain.dto.response.login.LoginResponse.UserLoginReponse;
 import vn.dencooper.fracejob.service.UserService;
 import vn.dencooper.fracejob.utils.JwtUtil;
 import vn.dencooper.fracejob.utils.annotation.ApiMessage;
@@ -53,18 +53,18 @@ public class AuthController {
 
                 User currrentUser = userService.fetchUserByEmail(request.getUsername());
                 LoginResponse res = new LoginResponse();
-                UserLoginReponse userLogin = UserLoginReponse.builder()
-                                .id(currrentUser.getId())
-                                .email(currrentUser.getEmail())
-                                .name(currrentUser.getName())
-                                .build();
-
-                String access_token = jwtUtil.createAccessToken(authentication.getName(), userLogin);
-
-                res.setAccessToken(access_token);
+                UserLoginReponse userLogin = new UserLoginReponse(
+                                currrentUser.getId(),
+                                currrentUser.getEmail(),
+                                currrentUser.getName(),
+                                currrentUser.getRole());
                 res.setUser(userLogin);
 
-                String refresh_token = jwtUtil.createRefreshToken(request.getUsername(), userLogin);
+                String access_token = jwtUtil.createAccessToken(authentication.getName(), res);
+
+                res.setAccessToken(access_token);
+
+                String refresh_token = jwtUtil.createRefreshToken(request.getUsername(), res);
                 userService.updateRefreshToken(request.getUsername(), refresh_token);
 
                 ResponseCookie resCookie = ResponseCookie.from("refresh_token", refresh_token)
@@ -85,11 +85,11 @@ public class AuthController {
                 String email = JwtUtil.getCurrentUserLogin().isPresent() ? JwtUtil.getCurrentUserLogin().get() : "";
                 User currrentUser = userService.fetchUserByEmail(email);
                 LoginResponse res = new LoginResponse();
-                UserLoginReponse userLogin = UserLoginReponse.builder()
-                                .id(currrentUser.getId())
-                                .email(currrentUser.getEmail())
-                                .name(currrentUser.getName())
-                                .build();
+                UserLoginReponse userLogin = new UserLoginReponse(
+                                currrentUser.getId(),
+                                currrentUser.getEmail(),
+                                currrentUser.getName(),
+                                currrentUser.getRole());
                 res.setUser(userLogin);
                 return ResponseEntity.ok().body(res);
 
@@ -103,17 +103,18 @@ public class AuthController {
                 String email = decodedToken.getSubject();
                 User currrentUser = userService.fetchUserByRefreshAndEmail(refresh_token, email);
                 LoginResponse res = new LoginResponse();
-                UserLoginReponse userLogin = UserLoginReponse.builder()
-                                .id(currrentUser.getId())
-                                .email(currrentUser.getEmail())
-                                .name(currrentUser.getName())
-                                .build();
-                String access_token = jwtUtil.createAccessToken(email, userLogin);
-
-                res.setAccessToken(access_token);
+                UserLoginReponse userLogin = new UserLoginReponse(
+                                currrentUser.getId(),
+                                currrentUser.getEmail(),
+                                currrentUser.getName(),
+                                currrentUser.getRole());
                 res.setUser(userLogin);
 
-                String new_refresh_token = jwtUtil.createRefreshToken(email, userLogin);
+                String access_token = jwtUtil.createAccessToken(email, res);
+
+                res.setAccessToken(access_token);
+
+                String new_refresh_token = jwtUtil.createRefreshToken(email, res);
                 userService.updateRefreshToken(email, new_refresh_token);
 
                 ResponseCookie resCookie = ResponseCookie.from("refresh_token", new_refresh_token)

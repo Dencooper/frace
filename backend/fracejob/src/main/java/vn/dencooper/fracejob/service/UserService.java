@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.Company;
+import vn.dencooper.fracejob.domain.Role;
 import vn.dencooper.fracejob.domain.User;
 import vn.dencooper.fracejob.domain.dto.request.user.UserCreationRequest;
 import vn.dencooper.fracejob.domain.dto.request.user.UserUpdationResquest;
@@ -18,10 +19,12 @@ import vn.dencooper.fracejob.domain.dto.response.Meta;
 import vn.dencooper.fracejob.domain.dto.response.PaginationResponse;
 import vn.dencooper.fracejob.domain.dto.response.user.UserResponse;
 import vn.dencooper.fracejob.domain.dto.response.user.UserResponse.CompanyUserResponse;
+import vn.dencooper.fracejob.domain.dto.response.user.UserResponse.RoleUserResponse;
 import vn.dencooper.fracejob.exception.AppException;
 import vn.dencooper.fracejob.exception.ErrorCode;
 import vn.dencooper.fracejob.mapper.UserMapper;
 import vn.dencooper.fracejob.repository.CompanyRepository;
+import vn.dencooper.fracejob.repository.RoleRepository;
 import vn.dencooper.fracejob.repository.UserRepository;
 
 @Service
@@ -31,6 +34,7 @@ public class UserService {
     UserRepository userRepository;
     UserMapper userMapper;
     CompanyRepository companyRepository;
+    RoleRepository roleRepository;
 
     public UserResponse handleCreateUser(UserCreationRequest request) {
         if (IsExistedUserByEmail(request.getEmail())) {
@@ -38,21 +42,31 @@ public class UserService {
         }
 
         User user = userMapper.toUser(request);
-        user = userRepository.save(handleCompanyUser(user));
+        user = userRepository.save(handleCompanyAndRoleUser(user));
 
         UserResponse res = userMapper.toUserResponse(user);
+
         if (user.getCompany() != null) {
             res.setCompany(new CompanyUserResponse(user.getCompany().getId(), user.getCompany().getName()));
+        }
+
+        if (user.getRole() != null) {
+            res.setRole(new RoleUserResponse(user.getRole().getId(), user.getRole().getName()));
         }
 
         return res;
     }
 
     public UserResponse fetchUserById(long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+        User user = new User();
+        user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
         UserResponse res = userMapper.toUserResponse(user);
         if (user.getCompany() != null) {
             res.setCompany(new CompanyUserResponse(user.getCompany().getId(), user.getCompany().getName()));
+        }
+
+        if (user.getRole() != null) {
+            res.setRole(new RoleUserResponse(user.getRole().getId(), user.getRole().getName()));
         }
         return res;
     }
@@ -76,6 +90,10 @@ public class UserService {
                     if (user.getCompany() != null) {
                         res.setCompany(new CompanyUserResponse(user.getCompany().getId(), user.getCompany().getName()));
                     }
+
+                    if (user.getRole() != null) {
+                        res.setRole(new RoleUserResponse(user.getRole().getId(), user.getRole().getName()));
+                    }
                     return res;
                 })
                 .toList());
@@ -84,10 +102,11 @@ public class UserService {
     }
 
     public UserResponse handleUpdateUser(long id, UserUpdationResquest request) {
-        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+        User user = new User();
+        user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
 
         userMapper.toUser(user, request);
-        user = userRepository.save(handleCompanyUser(user));
+        user = userRepository.save(handleCompanyAndRoleUser(user));
 
         UserResponse res = userMapper.toUserResponse(user);
         if (user.getCompany() != null) {
@@ -121,11 +140,17 @@ public class UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.REFRESH_TOKEN_INVALID));
     }
 
-    public User handleCompanyUser(User user) {
+    public User handleCompanyAndRoleUser(User user) {
         if (user.getCompany() != null) {
             Optional<Company> companyOptional = companyRepository.findById(user.getCompany().getId());
             user.setCompany(companyOptional.isPresent() ? companyOptional.get() : null);
         }
+
+        if (user.getRole() != null) {
+            Optional<Role> roleOptional = roleRepository.findById(user.getRole().getId());
+            user.setRole(roleOptional.isPresent() ? roleOptional.get() : null);
+        }
+
         return user;
     }
 }

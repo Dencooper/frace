@@ -57,6 +57,10 @@ public class User {
     String updatedBy;
 
     @ManyToOne
+    @JoinColumn(name = "role_id")
+    Role role;
+
+    @ManyToOne
     @JoinColumn(name = "company_id")
     Company company;
 
