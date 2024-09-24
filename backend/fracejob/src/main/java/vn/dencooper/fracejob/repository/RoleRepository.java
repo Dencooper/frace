@@ -13,5 +13,7 @@ import vn.dencooper.fracejob.domain.Role;
 public interface RoleRepository extends JpaRepository<Role, Long>, JpaSpecificationExecutor<Role> {
     boolean existsByName(String name);
 
+    Role findByName(String name);
+
     Page<Role> findAll(Specification<Role> specification, Pageable pageable);
 }
