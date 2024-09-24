@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
-import { CodeOutlined, LogoutOutlined, MenuFoldOutlined, RiseOutlined, TwitterOutlined } from '@ant-design/icons';
+import { CodeOutlined, ContactsOutlined, FireOutlined, LogoutOutlined, MenuFoldOutlined, RiseOutlined, TwitterOutlined } from '@ant-design/icons';
 import { Avatar, Drawer, Dropdown, MenuProps, Space, message } from 'antd';
 import { Menu, ConfigProvider } from 'antd';
 import styles from '@/styles/client.module.scss';
 import { isMobile } from 'react-device-detect';
+import { FaReact } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { callLogout } from '@/config/api';
 import { setLogoutAction } from '@/redux/slice/accountSlide';
+import ManageAccount from './modal/manage.account';
 
 const Header = (props: any) => {
     const navigate = useNavigate();
@@ -20,6 +22,8 @@ const Header = (props: any) => {
 
     const [current, setCurrent] = useState('home');
     const location = useLocation();
+
+    const [openMangeAccount, setOpenManageAccount] = useState<boolean>(false);
 
     useEffect(() => {
         setCurrent(location.pathname);
@@ -46,13 +50,12 @@ const Header = (props: any) => {
 
 
     const onClick: MenuProps['onClick'] = (e) => {
-        console.log('click ', e);
         setCurrent(e.key);
     };
 
     const handleLogout = async () => {
         const res = await callLogout();
-        if (res && +res.statusCode === 200) {
+        if (res && res && +res.statusCode === 200) {
             dispatch(setLogoutAction({}));
             message.success('Đăng xuất thành công');
             navigate('/')
@@ -60,6 +63,22 @@ const Header = (props: any) => {
     }
 
     const itemsDropdown = [
+        {
+            label: <label
+                style={{ cursor: 'pointer' }}
+                onClick={() => setOpenManageAccount(true)}
+            >Quản lý tài khoản</label>,
+            key: 'manage-account',
+            icon: <ContactsOutlined />
+        },
+        ...(user.role?.permissions?.length ? [{
+            label: <Link
+                to={"/admin"}
+            >Trang Quản Trị</Link>,
+            key: 'admin',
+            icon: <FireOutlined />
+        },] : []),
+
         {
             label: <label
                 style={{ cursor: 'pointer' }}
@@ -78,6 +97,7 @@ const Header = (props: any) => {
                 <div className={styles["container"]}>
                     {!isMobile ?
                         <div style={{ display: "flex", gap: 30 }}>
+
                             <div className={styles['top-menu']} style={{ marginTop: 10 }}>
                                 <ConfigProvider
                                     theme={{
@@ -132,8 +152,12 @@ const Header = (props: any) => {
                     items={itemsMobiles}
                 />
             </Drawer>
+            <ManageAccount
+                open={openMangeAccount}
+                onClose={setOpenManageAccount}
+            />
         </>
     )
 };
 
-export default Header;  
+export default Header;
