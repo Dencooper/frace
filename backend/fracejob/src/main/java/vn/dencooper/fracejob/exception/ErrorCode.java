@@ -23,7 +23,7 @@ public enum ErrorCode {
     // Exception in auth module
     BAD_CREDENTIAL(400, "Email hoặc mật khẩu không đúng"),
     MISSING_COOKIE(400, "Bạn chưa đăng nhập"),
-    REFRESH_TOKEN_INVALID(400, "Refresh Token không hợp lệ"),
+    REFRESH_TOKEN_INVALID(401, "Refresh Token không hợp lệ"),
 
     // Exception in company module
     COMPANY_NOTFOUND(400, "Không tìm thấy công ty"),
@@ -59,6 +59,7 @@ public enum ErrorCode {
     ROLE_EXISTED(400, "Role đã tốn tại"),
     ROLE_NOTFOUND(400, "Không tìm thấy Role"),
 
+    REQUEST_NOTALLOW(403, "Bạn không được phép truy cập trang này"),
     ;
 
     int code;

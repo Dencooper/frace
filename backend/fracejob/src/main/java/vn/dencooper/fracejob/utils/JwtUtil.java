@@ -30,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.dto.response.login.LoginResponse;
 import vn.dencooper.fracejob.domain.dto.response.login.LoginResponse.UserInnerToken;
-import vn.dencooper.fracejob.domain.dto.response.login.LoginResponse.UserLoginReponse;
 
 @Service
 @RequiredArgsConstructor

@@ -60,7 +60,7 @@ public class Permission {
         this.name = name;
         this.apiPath = apiPath;
         this.method = method;
-        this.module = name;
+        this.module = module;
     }
 
     @PrePersist

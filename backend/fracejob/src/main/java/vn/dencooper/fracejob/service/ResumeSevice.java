@@ -1,11 +1,14 @@
 package vn.dencooper.fracejob.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.turkraft.springfilter.builder.FilterBuilder;
 import com.turkraft.springfilter.converter.FilterSpecification;
 import com.turkraft.springfilter.converter.FilterSpecificationConverter;
 import com.turkraft.springfilter.parser.FilterParser;
@@ -14,7 +17,10 @@ import com.turkraft.springfilter.parser.node.FilterNode;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import vn.dencooper.fracejob.domain.Company;
+import vn.dencooper.fracejob.domain.Job;
 import vn.dencooper.fracejob.domain.Resume;
+import vn.dencooper.fracejob.domain.User;
 import vn.dencooper.fracejob.domain.dto.response.Meta;
 import vn.dencooper.fracejob.domain.dto.response.PaginationResponse;
 import vn.dencooper.fracejob.domain.dto.response.resume.ResumeCreationResponse;
@@ -32,16 +38,14 @@ import vn.dencooper.fracejob.utils.JwtUtil;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ResumeSevice {
-    @Autowired
     FilterParser filterParser;
-
-    @Autowired
+    FilterBuilder filterBuilder;
     FilterSpecificationConverter filterSpecificationConverter;
-
     ResumeRepository resumeRepository;
-    UserRepository userRepository;
-    JobRepository jobRepository;
     ResumeMapper resumeMapper;
+    UserRepository userRepository;
+    UserService userService;
+    JobRepository jobRepository;
 
     public boolean checkResumeExistByUserAndJob(Resume resume) {
         if (resume.getUser() == null) {
@@ -93,7 +97,28 @@ public class ResumeSevice {
     }
 
     public PaginationResponse fetchAllResumes(Specification<Resume> spec, Pageable pageable) {
-        Page<Resume> pageResumes = resumeRepository.findAll(spec, pageable);
+        List<Long> listJobIds = null;
+        String email = JwtUtil.getCurrentUserLogin().isPresent()
+                ? JwtUtil.getCurrentUserLogin().get()
+                : "";
+        User currentUser = userService.fetchUserByEmail(email);
+        Company userCompany = currentUser.getCompany();
+        if (userCompany != null) {
+            List<Job> companyJobs = userCompany.getJobs();
+            if (companyJobs != null && companyJobs.size() > 0) {
+                listJobIds = companyJobs
+                        .stream()
+                        .map(companyJob -> companyJob.getId())
+                        .toList();
+            }
+        }
+
+        Specification<Resume> jobInSpec = filterSpecificationConverter.convert(filterBuilder.field("job")
+                .in(filterBuilder.input(listJobIds)).get());
+
+        Specification<Resume> finalSpec = spec.and(jobInSpec);
+
+        Page<Resume> pageResumes = resumeRepository.findAll(finalSpec, pageable);
 
         if (pageResumes.getTotalElements() == 0) {
             throw new AppException(ErrorCode.RESUME_NOTFOUND);
