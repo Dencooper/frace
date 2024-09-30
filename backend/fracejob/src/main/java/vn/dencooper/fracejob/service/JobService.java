@@ -69,6 +69,7 @@ public class JobService {
         }
 
         Job job = jobRepository.save(req);
+
         JobResponse res = jobMapper.toJobResponse(job);
 
         if (job.getSkills() != null) {

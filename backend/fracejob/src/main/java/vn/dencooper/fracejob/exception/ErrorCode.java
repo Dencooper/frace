@@ -59,6 +59,10 @@ public enum ErrorCode {
     ROLE_EXISTED(400, "Role đã tốn tại"),
     ROLE_NOTFOUND(400, "Không tìm thấy Role"),
 
+    // Exception in subscriber module
+    SUBSCRIBER_NOTFOUND(400, "Không tìm thấy subsciber này"),
+
+    // Exception in Interceptor
     REQUEST_NOTALLOW(403, "Bạn không được phép truy cập trang này"),
     ;
 

@@ -61,6 +61,7 @@ public class SkillService {
     public void handleDeleteSkill(long id) throws AppException {
         Skill skill = skillRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SKILL_NOTFOUND));
         skill.getJobs().forEach((job) -> job.getSkills().remove(skill));
+        skill.getSubscribers().forEach((subscriber) -> subscriber.getSkills().remove(skill));
         skillRepository.delete(skill);
     }
 
