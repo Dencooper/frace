@@ -17,6 +17,7 @@ import vn.dencooper.fracejob.exception.ErrorCode;
 import vn.dencooper.fracejob.repository.JobRepository;
 import vn.dencooper.fracejob.repository.SkillRepository;
 import vn.dencooper.fracejob.repository.SubscriberRepository;
+import vn.dencooper.fracejob.utils.JwtUtil;
 
 @Service
 @RequiredArgsConstructor
@@ -88,5 +89,12 @@ public class SubscriberService {
                 }
             }
         }
+    }
+
+    public Subscriber findByEmail() {
+        String email = JwtUtil.getCurrentUserLogin().isPresent()
+                ? JwtUtil.getCurrentUserLogin().get()
+                : "";
+        return subscriberRepository.findByEmail(email);
     }
 }

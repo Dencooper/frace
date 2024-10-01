@@ -32,7 +32,13 @@ public class SubscriberController {
 
     @PutMapping
     @ApiMessage("Update a subscriber")
-    public ResponseEntity<Subscriber> updateSubscriber(@Valid @RequestBody Subscriber req) {
+    public ResponseEntity<Subscriber> updateSubscriber(@RequestBody Subscriber req) {
         return ResponseEntity.ok().body(subscriberService.handleUpdateSubscriber(req));
+    }
+
+    @PostMapping("/skills")
+    @ApiMessage("Get skills from subscribers")
+    public ResponseEntity<Subscriber> getSkill() {
+        return ResponseEntity.ok().body(subscriberService.findByEmail());
     }
 }
