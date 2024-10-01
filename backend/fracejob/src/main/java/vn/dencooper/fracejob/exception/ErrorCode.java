@@ -39,6 +39,8 @@ public enum ErrorCode {
     EMPTY_FILE(400, "File không được để trống"),
     MAX_FILESIZE(400, "Đã vượt quá kích thước tải lên tối đa(50MB)"),
     EXTENSIONS_FILE(400, "File phải có phần mở rộng thuộc [pdf, jpg, jpeg, png, doc, docx]"),
+    MISSING_PARAM(400, "Chưa truyền vào tên file"),
+    FILE_NOTFOUND(400, "Không tìm thấy file"),
 
     // Exception in resume module
     EMAIL_NOTBLANK(400, "Email không được để trống"),

@@ -120,9 +120,6 @@ public class ResumeSevice {
 
         Page<Resume> pageResumes = resumeRepository.findAll(finalSpec, pageable);
 
-        if (pageResumes.getTotalElements() == 0) {
-            throw new AppException(ErrorCode.RESUME_NOTFOUND);
-        }
         PaginationResponse res = new PaginationResponse();
         Meta meta = Meta.builder()
                 .page(pageable.getPageNumber() + 1)

@@ -17,8 +17,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse> handlingUncaseException(RuntimeException exception) {
         ApiResponse res = new ApiResponse<>();
         res.setStatusCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
+        res.setMessage(exception.getMessage());
         res.setError(ErrorCode.UNCATEGORIZED_EXCEPTION.getError());
-        res.setMessage("Internal Server Error");
         return ResponseEntity.badRequest().body(res);
     }
 
@@ -27,8 +27,8 @@ public class GlobalExceptionHandler {
             BadCredentialsException exception) {
         ApiResponse res = new ApiResponse<>();
         res.setStatusCode(ErrorCode.BAD_CREDENTIAL.getCode());
-        res.setError(ErrorCode.BAD_CREDENTIAL.getError());
-        res.setMessage("Đăng nhập không thành công");
+        res.setMessage(ErrorCode.BAD_CREDENTIAL.getError());
+        res.setError("Đăng nhập không thành công");
         return ResponseEntity.badRequest().body(res);
     }
 
@@ -37,8 +37,8 @@ public class GlobalExceptionHandler {
             InternalAuthenticationServiceException exception) {
         ApiResponse res = new ApiResponse<>();
         res.setStatusCode(ErrorCode.BAD_CREDENTIAL.getCode());
-        res.setError(ErrorCode.BAD_CREDENTIAL.getError());
-        res.setMessage("Đăng nhập không thành công");
+        res.setMessage(ErrorCode.BAD_CREDENTIAL.getError());
+        res.setError("Đăng nhập không thành công");
         return ResponseEntity.badRequest().body(res);
     }
 
@@ -48,8 +48,16 @@ public class GlobalExceptionHandler {
 
         ApiResponse res = new ApiResponse<>();
         res.setStatusCode(errorCode.getCode());
-        res.setError(errorCode.getError());
-        res.setMessage(errorCode.getCode() >= 500 ? "Internal Server Error" : "Bad Request");
+        res.setMessage(errorCode.getError());
+        if (errorCode.getCode() >= 500) {
+            res.setError("Internal Server Error");
+        } else if (errorCode.getCode() == 403) {
+            res.setError("Forbiden");
+
+        } else {
+            res.setError("Bad Request");
+
+        }
         return ResponseEntity.badRequest().body(res);
     }
 
@@ -67,8 +75,8 @@ public class GlobalExceptionHandler {
 
         ApiResponse res = new ApiResponse<>();
         res.setStatusCode(errorCode.getCode());
-        res.setError(errorCode.getError());
-        res.setMessage("Bad Request");
+        res.setMessage(errorCode.getError());
+        res.setError("Bad Request");
         return ResponseEntity.badRequest().body(res);
     }
 
@@ -77,8 +85,8 @@ public class GlobalExceptionHandler {
             MissingRequestCookieException exception) {
         ApiResponse res = new ApiResponse<>();
         res.setStatusCode(ErrorCode.MISSING_COOKIE.getCode());
-        res.setError(ErrorCode.MISSING_COOKIE.getError());
-        res.setMessage(exception.getMessage());
+        res.setMessage(ErrorCode.MISSING_COOKIE.getError());
+        res.setError(exception.getMessage());
 
         return ResponseEntity.badRequest().body(res);
     }
@@ -88,8 +96,8 @@ public class GlobalExceptionHandler {
             MaxUploadSizeExceededException exception) {
         ApiResponse res = new ApiResponse<>();
         res.setStatusCode(ErrorCode.MAX_FILESIZE.getCode());
-        res.setError(ErrorCode.MAX_FILESIZE.getError());
-        res.setMessage("Bad Request");
+        res.setMessage(ErrorCode.MAX_FILESIZE.getError());
+        res.setError("Bad Request");
 
         return ResponseEntity.badRequest().body(res);
     }
