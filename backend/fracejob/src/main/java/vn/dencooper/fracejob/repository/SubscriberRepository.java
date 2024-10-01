@@ -7,5 +7,5 @@ import vn.dencooper.fracejob.domain.Subscriber;
 
 @Repository
 public interface SubscriberRepository extends JpaRepository<Subscriber, Long> {
-    boolean existByEmail(String email);
+    boolean existsByEmail(String email);
 }
