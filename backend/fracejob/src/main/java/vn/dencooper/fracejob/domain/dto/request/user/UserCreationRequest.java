@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import vn.dencooper.fracejob.domain.Company;
 import vn.dencooper.fracejob.domain.Role;
+import vn.dencooper.fracejob.utils.annotation.validator.StrongPassword;
 import vn.dencooper.fracejob.utils.constant.GenderEnum;
 
 @Data
@@ -24,7 +25,7 @@ public class UserCreationRequest {
     String email;
 
     @NotNull
-    @Size(min = 6, message = "PASSWORD_INVALID")
+    @StrongPassword(message = "PASSWORD_INVALID")
     String password;
 
     @NotNull

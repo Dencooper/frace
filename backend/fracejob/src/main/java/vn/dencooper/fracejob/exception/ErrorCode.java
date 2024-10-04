@@ -16,7 +16,7 @@ public enum ErrorCode {
     // Exception in user module
     EMAIL_EXISTED(400, "Email đã tổn tại"),
     EMAIL_INVALID(400, "Email không hợp lệ"),
-    PASSWORD_INVALID(400, "Mật khẩu phải có tối thiểu 6 kí tự"),
+    PASSWORD_INVALID(400, "Mật khẩu phải có tối thiểu 8 kí tự (chữ thường, hoa, số, kí tự đặc biệt)"),
     NAME_INVALID(400, "Họ tên phải có tối thiếu 3 kí tự"),
     USER_NOTFOUND(400, "Không tìm thấy người dùng"),
 
