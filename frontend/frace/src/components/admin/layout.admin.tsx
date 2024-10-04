@@ -33,6 +33,11 @@ const LayoutAdmin = () => {
     const permissions = useAppSelector(state => state.account.user.role.permissions);
     const [menuItems, setMenuItems] = useState<MenuProps['items']>([]);
 
+    const name = permissions?.find(item =>
+        item.apiPath === ALL_PERMISSIONS.PERMISSIONS.GET_PAGINATE.apiPath
+        && item.method === ALL_PERMISSIONS.USERS.GET_PAGINATE.method
+    ) ? true : false;
+
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
@@ -167,7 +172,8 @@ const LayoutAdmin = () => {
                         collapsed={collapsed}
                         onCollapse={(value) => setCollapsed(value)}>
                         <div style={{ height: 32, margin: 16, textAlign: 'center' }}>
-                            <BugOutlined />  ADMIN
+                            <BugOutlined />
+                            {name ? " ADMIN" : " HR"}
                         </div>
                         <Menu
                             selectedKeys={[activeMenu]}

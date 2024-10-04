@@ -22,14 +22,9 @@ export const API_LIST = {
 
 
 const Access = (props: IProps) => {
-    //set default: hideChildren = false => vẫn render children
-    // hideChildren = true => ko render children, ví dụ hide button (button này check quyền)
     const { permission, hideChildren = false } = props;
     const [allow, setAllow] = useState<boolean>(true);
-
     const permissions = useAppSelector(state => state.account.user.role.permissions);
-
-
     useEffect(() => {
         if (permissions?.length) {
             const check = permissions.find(item =>

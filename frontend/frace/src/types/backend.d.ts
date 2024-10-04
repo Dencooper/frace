@@ -166,3 +166,15 @@ export interface IRole {
     createdAt?: string;
     updatedAt?: string;
 }
+
+export interface ISubscribers {
+    id?: string;
+    name?: string;
+    email?: string;
+    skills: string[];
+    createdBy?: string;
+    isDeleted?: boolean;
+    deletedAt?: boolean | null;
+    createdAt?: string;
+    updatedAt?: string;
+}

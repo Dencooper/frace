@@ -103,7 +103,7 @@ const SearchClient = () => {
                         />
                     </ProForm.Item>
                 </Col>
-                <Col span={12} md={6}>
+                <Col span={12} md={5}>
                     <ProForm.Item
                         name="location"
                     >
@@ -122,7 +122,7 @@ const SearchClient = () => {
                         />
                     </ProForm.Item>
                 </Col>
-                <Col span={12} md={4}>
+                <Col span={12} md={3}>
                     <Button type='primary' onClick={() => form.submit()}
                         style={{ width: '100%', height: 50, fontSize: 15 }}>Tìm kiếm</Button>
                 </Col>

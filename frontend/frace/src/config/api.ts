@@ -1,4 +1,4 @@
-import { IBackendRes, ICompany, IAccount, IUser, IModelPaginate, IGetAccount, IJob, IResume, IPermission, IRole, ISkill } from '@/types/backend';
+import { IBackendRes, ICompany, IAccount, IUser, IModelPaginate, IGetAccount, IJob, IResume, IPermission, IRole, ISkill, ISubscribers } from '@/types/backend';
 import axios from 'config/axios-customize';
 
 /**
@@ -104,6 +104,14 @@ export const callUpdateUser = (user: IUser) => {
     return axios.put<IBackendRes<IUser>>(`/api/v1/users`, { ...user })
 }
 
+export const callUpdateUserLogin = (user: IUser) => {
+    return axios.put<IBackendRes<IUser>>(`/api/v1/users/user-login`, { ...user })
+}
+
+export const callGetUserLogin = () => {
+    return axios.get<IBackendRes<IUser>>(`/api/v1/users/user-login`)
+}
+
 export const callDeleteUser = (id: string) => {
     return axios.delete<IBackendRes<IUser>>(`/api/v1/users/${id}`);
 }
@@ -173,6 +181,10 @@ export const callFetchResumeByUser = () => {
     return axios.post<IBackendRes<IModelPaginate<IResume>>>(`/api/v1/resumes/by-user`);
 }
 
+export const callCountUser = () => {
+    return axios.get(`/api/v1/users/quantity`);
+}
+
 /**
  * 
 Module Permission
@@ -220,3 +232,21 @@ export const callFetchRole = (query: string) => {
 export const callFetchRoleById = (id: string) => {
     return axios.get<IBackendRes<IRole>>(`/api/v1/roles/${id}`);
 }
+
+/**
+ * 
+Module Subscribers
+ */
+export const callCreateSubscriber = (subs: ISubscribers) => {
+    return axios.post<IBackendRes<ISubscribers>>('/api/v1/subscribers', { ...subs })
+}
+
+export const callGetSubscriberSkills = () => {
+    return axios.post<IBackendRes<ISubscribers>>('/api/v1/subscribers/skills')
+}
+
+export const callUpdateSubscriber = (subs: ISubscribers) => {
+    return axios.put<IBackendRes<ISubscribers>>(`/api/v1/subscribers`, { ...subs })
+}
+
+
