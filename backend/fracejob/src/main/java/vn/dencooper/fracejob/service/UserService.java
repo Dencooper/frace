@@ -1,5 +1,6 @@
 package vn.dencooper.fracejob.service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -24,8 +25,10 @@ import vn.dencooper.fracejob.exception.AppException;
 import vn.dencooper.fracejob.exception.ErrorCode;
 import vn.dencooper.fracejob.mapper.UserMapper;
 import vn.dencooper.fracejob.repository.CompanyRepository;
+import vn.dencooper.fracejob.repository.JobRepository;
 import vn.dencooper.fracejob.repository.RoleRepository;
 import vn.dencooper.fracejob.repository.UserRepository;
+import vn.dencooper.fracejob.utils.JwtUtil;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +38,7 @@ public class UserService {
     UserMapper userMapper;
     CompanyRepository companyRepository;
     RoleRepository roleRepository;
+    JobRepository jobRepository;
 
     public UserResponse handleCreateUser(UserCreationRequest request) {
         if (IsExistedUserByEmail(request.getEmail())) {
@@ -116,6 +120,24 @@ public class UserService {
         return res;
     }
 
+    public UserResponse handleUpdateUserLogin(UserUpdationResquest request) {
+        String email = JwtUtil.getCurrentUserLogin().isPresent()
+                ? JwtUtil.getCurrentUserLogin().get()
+                : "";
+        User user = new User();
+        user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+
+        userMapper.toUser(user, request);
+        user = userRepository.save(handleCompanyAndRoleUser(user));
+
+        UserResponse res = userMapper.toUserResponse(user);
+        if (user.getCompany() != null) {
+            res.setCompany(new CompanyUserResponse(user.getCompany().getId(), user.getCompany().getName()));
+        }
+
+        return res;
+    }
+
     public void handleDeleteUser(long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
         userRepository.delete(user);
@@ -152,5 +174,30 @@ public class UserService {
         }
 
         return user;
+    }
+
+    public UserResponse getUserLogin() {
+        String email = JwtUtil.getCurrentUserLogin().isPresent()
+                ? JwtUtil.getCurrentUserLogin().get()
+                : "";
+        User user = new User();
+        user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+        UserResponse res = userMapper.toUserResponse(user);
+        if (user.getCompany() != null) {
+            res.setCompany(new CompanyUserResponse(user.getCompany().getId(), user.getCompany().getName()));
+        }
+
+        if (user.getRole() != null) {
+            res.setRole(new RoleUserResponse(user.getRole().getId(), user.getRole().getName()));
+        }
+        return res;
+    }
+
+    public ArrayList<Long> count() {
+        ArrayList<Long> arr = new ArrayList<>();
+        arr.add(userRepository.count());
+        arr.add(companyRepository.count());
+        arr.add(jobRepository.count());
+        return arr;
     }
 }

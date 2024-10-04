@@ -34,6 +34,11 @@ public enum ErrorCode {
 
     // Exception in job module
     JOB_NOTFOUND(400, "Không tìm thấy công việc"),
+    LOCATION_NOTBLANK(400, "Địa điểm không được để trống"),
+    SALARY_NOTBLANK(400, "Lương không được để trống"),
+    QUANTITY_NOTBLANK(400, "Số lượng không được để trống"),
+    LEVEL_NOTBLANK(400, "Level không được để trống"),
+    DESCRIPTIONJOB_NOTBLANK(400, "Mô tả công việc không được để trống"),
 
     // Exception in file module
     EMPTY_FILE(400, "File không được để trống"),

@@ -33,7 +33,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         ApiResponse<Object> res = new ApiResponse<Object>();
         res.setStatusCode(HttpStatus.UNAUTHORIZED.value());
-        res.setError("true");
+        res.setError("Unauthentication");
         res.setMessage("Token không hợp lệ (hết hạn, không đúng định dạng, hoặc không truyền JWT ở header)");
 
         mapper.writeValue(response.getWriter(), res);

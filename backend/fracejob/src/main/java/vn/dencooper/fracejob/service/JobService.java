@@ -56,9 +56,8 @@ public class JobService {
     }
 
     public JobResponse handleUpdateJob(Job req) throws AppException {
-        if (!jobRepository.existsById(req.getId())) {
-            throw new AppException(ErrorCode.JOB_NOTFOUND);
-        }
+        Job currentJob = jobRepository.findById(req.getId())
+                .orElseThrow(() -> new AppException(ErrorCode.JOB_NOTFOUND));
 
         if (req.getSkills() != null) {
             List<Long> listIdSkill = req.getSkills()
@@ -68,7 +67,9 @@ public class JobService {
             req.setSkills(skillRepository.findByIdIn(listIdSkill));
         }
 
-        Job job = jobRepository.save(req);
+        jobMapper.toJob(currentJob, req);
+
+        Job job = jobRepository.save(currentJob);
 
         JobResponse res = jobMapper.toJobResponse(job);
 

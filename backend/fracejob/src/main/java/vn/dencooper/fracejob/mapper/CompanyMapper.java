@@ -9,7 +9,8 @@ import vn.dencooper.fracejob.domain.dto.request.company.CompanyCreationRequest;
 
 @Mapper(componentModel = "spring")
 public interface CompanyMapper {
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
     void toCompany(@MappingTarget Company company, Company request);
 
     Company toCompany(CompanyCreationRequest request);

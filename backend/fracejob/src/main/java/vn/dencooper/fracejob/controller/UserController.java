@@ -1,5 +1,7 @@
 package vn.dencooper.fracejob.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -50,6 +52,12 @@ public class UserController {
         return ResponseEntity.ok().body(userService.fetchUserById(id));
     }
 
+    @GetMapping("/user-login")
+    @ApiMessage("Fetch User Login")
+    public ResponseEntity<UserResponse> getUserLogin() {
+        return ResponseEntity.ok().body(userService.getUserLogin());
+    }
+
     @GetMapping
     @ApiMessage("Fetch All Users")
     public ResponseEntity<PaginationResponse> getAllUsers(@Filter Specification<User> spec,
@@ -65,11 +73,23 @@ public class UserController {
         return ResponseEntity.ok().body(userService.handleUpdateUser(id, request));
     }
 
+    @PutMapping("/user-login")
+    @ApiMessage("Update User")
+    public ResponseEntity<UserResponse> updateUserLogin(@Valid @RequestBody UserUpdationResquest request) {
+        return ResponseEntity.ok().body(userService.handleUpdateUserLogin(request));
+    }
+
     @DeleteMapping("/{id}")
     @ApiMessage("Delete User")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") long id) {
         userService.handleDeleteUser(id);
         return ResponseEntity.ok().body(null);
+    }
+
+    @GetMapping("/quantity")
+    @ApiMessage("Get quantity user")
+    public ArrayList<Long> getQuantity() {
+        return userService.count();
     }
 
 }

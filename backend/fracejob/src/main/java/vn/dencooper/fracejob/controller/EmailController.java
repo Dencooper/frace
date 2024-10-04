@@ -1,5 +1,6 @@
 package vn.dencooper.fracejob.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +24,8 @@ public class EmailController {
     @ApiMessage("Send email")
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
-    public String sendEmail() {
+    public ResponseEntity<String> sendEmail() {
         subscriberService.sendSubscribersEmailJobs();
-        return "ok";
+        return ResponseEntity.ok().body("Send email successfully");
     }
 }

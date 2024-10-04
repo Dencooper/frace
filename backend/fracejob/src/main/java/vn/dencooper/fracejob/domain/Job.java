@@ -22,6 +22,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,15 +44,24 @@ public class Job {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
+    @NotBlank(message = "NAME_NOTBLANK")
     String name;
+
+    @NotBlank(message = "LOCATION_NOTBLANK")
     String location;
+
+    @NotBlank(message = "SALARY_NOTBLANK")
     double salary;
+
+    @NotBlank(message = "QUANTITY_NOTBLANK")
     int quantity;
 
     @Enumerated(EnumType.STRING)
+    @NotBlank(message = "LEVEL_NOTBLANK")
     LevelEnum level;
 
     @Column(columnDefinition = "MEDIUMTEXT")
+    @NotBlank(message = "DESCRIPTIONJOB_NOTBLANK")
     String description;
 
     Instant startDate;
