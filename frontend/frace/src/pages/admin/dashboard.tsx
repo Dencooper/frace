@@ -1,5 +1,7 @@
 import { Card, Col, Row, Statistic } from "antd";
 import { useEffect, useState } from 'react';
+import { Result } from "antd";
+
 
 import CountUp from 'react-countup';
 import { useAppSelector } from '@/redux/hooks';
@@ -49,24 +51,38 @@ const DashboardPage = () => {
                     </Card>
                 </Col>
             }
-            <Col span={24} md={8}>
-                <Card title="Company" bordered={false} >
-                    <Statistic
-                        title="Active Comanies"
-                        value={quantityCompany}
-                        formatter={formatter}
+            {permissions?.length == 0 ?
+                <Col span={24} md={24}>
+                    <Result
+                        status="403"
+                        title="Truy cập bị từ chối"
+                        subTitle="Xin lỗi, bạn không có quyền hạn (permission) truy cập thông tin này"
                     />
-                </Card>
-            </Col>
-            <Col span={24} md={8}>
-                <Card title="Job" bordered={false} >
-                    <Statistic
-                        title="Active Jobs"
-                        value={quantityJob}
-                        formatter={formatter}
-                    />
-                </Card>
-            </Col>
+                </Col>
+
+                :
+                <>
+                    <Col span={24} md={8}>
+                        <Card title="Company" bordered={false} >
+                            <Statistic
+                                title="Active Comanies"
+                                value={quantityCompany}
+                                formatter={formatter}
+                            />
+                        </Card>
+                    </Col>
+                    <Col span={24} md={8}>
+                        <Card title="Job" bordered={false} >
+                            <Statistic
+                                title="Active Jobs"
+                                value={quantityJob}
+                                formatter={formatter}
+                            />
+                        </Card>
+                    </Col>
+                </>
+
+            }
         </Row>
 
 

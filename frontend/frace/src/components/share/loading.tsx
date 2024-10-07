@@ -1,20 +1,14 @@
-import { useNavigate } from "react-router-dom";
-import { Button, Result } from 'antd';
+import HashLoader from "react-spinners/HashLoader";
 
-const NotFound = () => {
-    const navigate = useNavigate();
+const Loading = () => {
+
+    const style: React.CSSProperties = { position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" };
+
     return (
-        <>
-            <Result
-                status="404"
-                title="404"
-                subTitle="Sorry, the page you visited does not exist."
-                extra={<Button type="primary"
-                    onClick={() => navigate('/')}
-                >Back Home</Button>}
-            />
-        </>
+        <div style={style}>
+            <HashLoader color="#36d7b7" />
+        </div>
     )
 }
 
-export default NotFound;
+export default Loading;

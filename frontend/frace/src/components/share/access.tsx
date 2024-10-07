@@ -32,12 +32,14 @@ const Access = (props: IProps) => {
                 && item.method === permission.method
                 && item.module === permission.module
             )
-            if (check) {
+            if (check && !allow) {
                 setAllow(true)
-            } else
+            } else if (!check && allow)
                 setAllow(false);
         }
-    }, [permissions])
+        else
+            setAllow(false);
+    }, [permissions, allow])
 
     return (
         <>

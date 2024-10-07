@@ -27,6 +27,9 @@ const UserPage = () => {
     const users = useAppSelector(state => state.user.result);
     const dispatch = useAppDispatch();
 
+    const permissions = useAppSelector(state => state.account.user.role.permissions);
+
+
     const handleDeleteUser = async (id: string | undefined) => {
         if (id) {
             const res = await callDeleteUser(id);
@@ -205,6 +208,7 @@ const UserPage = () => {
 
     return (
         <div>
+            
             <Access
                 permission={ALL_PERMISSIONS.USERS.GET_PAGINATE}
             >
