@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import vn.dencooper.fracejob.domain.Company;
 import vn.dencooper.fracejob.domain.Job;
+import vn.dencooper.fracejob.domain.Resume;
+import vn.dencooper.fracejob.domain.User;
 import vn.dencooper.fracejob.domain.dto.response.Meta;
 import vn.dencooper.fracejob.domain.dto.response.PaginationResponse;
 import vn.dencooper.fracejob.domain.dto.response.job.JobResponse;
@@ -20,6 +23,7 @@ import vn.dencooper.fracejob.exception.ErrorCode;
 import vn.dencooper.fracejob.mapper.JobMapper;
 import vn.dencooper.fracejob.repository.JobRepository;
 import vn.dencooper.fracejob.repository.SkillRepository;
+import vn.dencooper.fracejob.utils.JwtUtil;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +31,8 @@ import vn.dencooper.fracejob.repository.SkillRepository;
 public class JobService {
     JobRepository jobRepository;
     JobMapper jobMapper;
+
+    UserService userService;
 
     SkillRepository skillRepository;
 
@@ -110,6 +116,32 @@ public class JobService {
             throw new AppException(ErrorCode.JOB_NOTFOUND);
         }
         jobRepository.deleteById(id);
+    }
+
+    public PaginationResponse fetchAllJobsByCompany(Pageable pageable) {
+        List<Job> companyJobs = null;
+        String email = JwtUtil.getCurrentUserLogin().isPresent()
+                ? JwtUtil.getCurrentUserLogin().get()
+                : "";
+        User currentUser = userService.fetchUserByEmail(email);
+        Company userCompany = currentUser.getCompany();
+        if (userCompany != null) {
+            companyJobs = userCompany.getJobs();
+        }
+        int totalPages = companyJobs.size() % pageable.getPageSize() == 0
+                ? companyJobs.size() / pageable.getPageSize()
+                : (companyJobs.size() / pageable.getPageSize()) + 1;
+        PaginationResponse res = new PaginationResponse();
+        Meta meta = Meta.builder()
+                .page(pageable.getPageNumber() + 1)
+                .pageSize(pageable.getPageSize())
+                .pages(totalPages)
+                .total(companyJobs.size())
+                .build();
+        res.setMeta(meta);
+        res.setResult(companyJobs);
+
+        return res;
     }
 
 }

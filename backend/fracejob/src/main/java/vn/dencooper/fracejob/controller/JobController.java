@@ -65,4 +65,11 @@ public class JobController {
         jobService.handleDeleteJob(id);
         return ResponseEntity.ok().body(null);
     }
+
+    @PostMapping("/by-company")
+    @ApiMessage("Get all jobs by company")
+    public ResponseEntity<PaginationResponse> getAllJobsByCompany(Pageable pageable) {
+        PaginationResponse jobs = jobService.fetchAllJobsByCompany(pageable);
+        return ResponseEntity.ok().body(jobs);
+    }
 }
