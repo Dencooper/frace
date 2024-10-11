@@ -144,6 +144,10 @@ export const callFetchJobById = (id: string) => {
     return axios.get<IBackendRes<IJob>>(`/api/v1/jobs/${id}`);
 }
 
+export const callFetchJobsByCompany = () => {
+    return axios.post<IBackendRes<IModelPaginate<IJob>>>(`/api/v1/jobs/by-company`);
+}
+
 /**
  * 
 Module Resume

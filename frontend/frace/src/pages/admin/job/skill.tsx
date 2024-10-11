@@ -12,6 +12,10 @@ import queryString from 'query-string';
 import { sfLike } from "spring-filter-query-builder";
 import { fetchSkill } from "@/redux/slice/skillSlide";
 import ModalSkill from "@/components/admin/skill/modal.skill";
+import { ALL_PERMISSIONS } from "@/config/permissions";
+import Access from "@/components/share/access";
+
+
 
 const SkillPage = () => {
     const [openModal, setOpenModal] = useState<boolean>(false);
@@ -180,47 +184,52 @@ const SkillPage = () => {
 
     return (
         <div>
-            <DataTable<ISkill>
-                actionRef={tableRef}
-                headerTitle="Danh sách Skill"
-                rowKey="id"
-                loading={isFetching}
-                columns={columns}
-                dataSource={skills}
-                request={async (params, sort, filter): Promise<any> => {
-                    const query = buildQuery(params, sort, filter);
-                    dispatch(fetchSkill({ query }))
-                }}
-                scroll={{ x: true }}
-                pagination={
-                    {
-                        current: meta.page,
-                        pageSize: meta.pageSize,
-                        showSizeChanger: true,
-                        total: meta.total,
-                        showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
+            <Access
+                permission={ALL_PERMISSIONS.PERMISSIONS.GET_PAGINATE}
+            >
+                <DataTable<ISkill>
+                    actionRef={tableRef}
+                    headerTitle="Danh sách Skill"
+                    rowKey="id"
+                    loading={isFetching}
+                    columns={columns}
+                    dataSource={skills}
+                    request={async (params, sort, filter): Promise<any> => {
+                        const query = buildQuery(params, sort, filter);
+                        dispatch(fetchSkill({ query }))
+                    }}
+                    scroll={{ x: true }}
+                    pagination={
+                        {
+                            current: meta.page,
+                            pageSize: meta.pageSize,
+                            showSizeChanger: true,
+                            total: meta.total,
+                            showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
+                        }
                     }
-                }
-                rowSelection={false}
-                toolBarRender={(_action, _rows): any => {
-                    return (
-                        <Button
-                            icon={<PlusOutlined />}
-                            type="primary"
-                            onClick={() => setOpenModal(true)}
-                        >
-                            Thêm mới
-                        </Button>
-                    );
-                }}
-            />
-            <ModalSkill
-                openModal={openModal}
-                setOpenModal={setOpenModal}
-                reloadTable={reloadTable}
-                dataInit={dataInit}
-                setDataInit={setDataInit}
-            />
+                    rowSelection={false}
+                    toolBarRender={(_action, _rows): any => {
+                        return (
+                            <Button
+                                icon={<PlusOutlined />}
+                                type="primary"
+                                onClick={() => setOpenModal(true)}
+                            >
+                                Thêm mới
+                            </Button>
+                        );
+                    }}
+                />
+                <ModalSkill
+                    openModal={openModal}
+                    setOpenModal={setOpenModal}
+                    reloadTable={reloadTable}
+                    dataInit={dataInit}
+                    setDataInit={setDataInit}
+                />
+            </Access>
+
         </div>
     )
 }

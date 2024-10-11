@@ -26,7 +26,7 @@ const JobTabs = () => {
     return (
         <div>
             <Access
-                permission={ALL_PERMISSIONS.JOBS.GET_PAGINATE}
+                permission={ALL_PERMISSIONS.JOBS.UPDATE}
             >
                 <Tabs
                     defaultActiveKey="1"
