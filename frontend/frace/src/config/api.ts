@@ -173,6 +173,10 @@ export const callDeleteResume = (id: string) => {
     return axios.delete<IBackendRes<IResume>>(`/api/v1/resumes/${id}`);
 }
 
+export const callDeleteResumeById = (id: string) => {
+    return axios.delete(`/api/v1/resumes/${id}`);
+}
+
 export const callFetchResume = (query: string) => {
     return axios.get<IBackendRes<IModelPaginate<IResume>>>(`/api/v1/resumes?${query}`);
 }
@@ -183,6 +187,10 @@ export const callFetchResumeById = (id: string) => {
 
 export const callFetchResumeByUser = () => {
     return axios.post<IBackendRes<IModelPaginate<IResume>>>(`/api/v1/resumes/by-user`);
+}
+
+export const callFetchResumeByID = () => {
+    return axios.post(`/api/v1/resumes/by-user`);
 }
 
 export const callCountUser = () => {

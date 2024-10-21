@@ -12,11 +12,13 @@ import { useState } from 'react';
 interface IProps {
     isModalOpen: boolean;
     setIsModalOpen: (v: boolean) => void;
+    isApplied: boolean;
+    setIsApplied: (v: boolean) => void;
     jobDetail: IJob | null;
 }
 
 const ApplyModal = (props: IProps) => {
-    const { isModalOpen, setIsModalOpen, jobDetail } = props;
+    const { isModalOpen, setIsModalOpen, isApplied, setIsApplied, jobDetail } = props;
     const isAuthenticated = useAppSelector(state => state.account.isAuthenticated);
     const user = useAppSelector(state => state.account.user);
     const [urlCV, setUrlCV] = useState<string>("");
@@ -39,6 +41,7 @@ const ApplyModal = (props: IProps) => {
                 const res = await callCreateResume(urlCV, jobDetail?.id, user.email, user.id);
                 if (res.data) {
                     message.success("Rải CV thành công!");
+                    setIsApplied(true);
                     setIsModalOpen(false);
                 } else {
                     notification.error({

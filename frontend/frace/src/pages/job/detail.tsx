@@ -1,10 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
+import { useAppSelector } from "@/redux/hooks";
 import { IJob } from "@/types/backend";
-import { callFetchJobById } from "@/config/api";
+import { callFetchJobById, callFetchResumeByID, callDeleteResume } from "@/config/api";
 import styles from 'styles/client.module.scss';
 import parse from 'html-react-parser';
-import { Col, Divider, Row, Skeleton, Tag } from "antd";
+import { Col, Divider, Row, Skeleton, Tag, message } from "antd";
 import { DollarOutlined, EnvironmentOutlined, HistoryOutlined } from "@ant-design/icons";
 import { getLocationName } from "@/config/utils";
 import dayjs from 'dayjs';
@@ -16,13 +17,12 @@ dayjs.extend(relativeTime)
 const ClientJobDetailPage = (props: any) => {
     const [jobDetail, setJobDetail] = useState<IJob | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
+    const [isApplied, setIsApplied] = useState<boolean>(false);
+    const [resume, setResume] = useState<string>("");
     let location = useLocation();
     let params = new URLSearchParams(location.search);
-    const id = params?.get("id"); // job id
-
+    const id = params?.get("id");
     useEffect(() => {
         const init = async () => {
             if (id) {
@@ -33,9 +33,26 @@ const ClientJobDetailPage = (props: any) => {
                 }
                 setIsLoading(false)
             }
+            const res = await callFetchResumeByID();
+            if (res && res.data) {
+                const listCV = res.data.result;
+                const check = listCV.find((item: { job: { id: string | null; }; }) =>
+                    item.job.id == id
+                );
+                if (check) {
+                    setIsApplied(true);
+                    setResume(check.id);
+                }
+            }
         }
         init();
-    }, [id]);
+    }, [id, isApplied]);
+
+    const onClickCancelBtn = async () => {
+        await callDeleteResume(resume);
+        message.success("Hủy nộp hồ sơ thành công!");
+        setIsApplied(false);
+    }
 
     return (
         <div className={`${styles["container"]} ${styles["detail-job-section"]}`}>
@@ -50,10 +67,18 @@ const ClientJobDetailPage = (props: any) => {
                                     {jobDetail.name}
                                 </div>
                                 <div>
-                                    <button
-                                        onClick={() => setIsModalOpen(true)}
-                                        className={styles["btn-apply"]}
-                                    >Apply Now</button>
+                                    {isApplied ?
+                                        <button
+                                            className={styles["btn-apply"]}
+                                            onClick={() => onClickCancelBtn()}
+                                            style={{ backgroundColor: "#d82727" }}
+                                        >Hủy Nộp</button>
+                                        :
+                                        <button
+                                            onClick={() => setIsModalOpen(true)}
+                                            className={styles["btn-apply"]}
+                                        >Apply Now</button>
+                                    }
                                 </div>
                                 <Divider />
                                 <div className={styles["skills"]}>
@@ -99,6 +124,8 @@ const ClientJobDetailPage = (props: any) => {
             }
             <ApplyModal
                 isModalOpen={isModalOpen}
+                isApplied={isApplied}
+                setIsApplied={setIsApplied}
                 setIsModalOpen={setIsModalOpen}
                 jobDetail={jobDetail}
             />
