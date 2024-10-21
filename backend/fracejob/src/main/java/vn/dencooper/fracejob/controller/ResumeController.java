@@ -1,5 +1,8 @@
 package vn.dencooper.fracejob.controller;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -63,7 +66,7 @@ public class ResumeController {
 
     @DeleteMapping("/{id}")
     @ApiMessage("Delete a resume")
-    public ResponseEntity<Void> deleteResume(@PathVariable("id") long id) {
+    public ResponseEntity<Void> deleteResume(@PathVariable("id") long id) throws URISyntaxException, IOException {
         resumeSevice.handleDeleteResume(id);
         return ResponseEntity.ok().body(null);
     }

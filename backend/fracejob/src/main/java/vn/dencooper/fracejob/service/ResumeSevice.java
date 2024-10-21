@@ -1,5 +1,7 @@
 package vn.dencooper.fracejob.service;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,7 @@ public class ResumeSevice {
     UserRepository userRepository;
     UserService userService;
     JobRepository jobRepository;
+    FileService fileService;
 
     public boolean checkResumeExistByUserAndJob(Resume resume) {
         if (resume.getUser() == null) {
@@ -137,9 +140,10 @@ public class ResumeSevice {
         return res;
     }
 
-    public void handleDeleteResume(long id) {
+    public void handleDeleteResume(long id) throws URISyntaxException, IOException {
         Resume resume = resumeRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.RESUME_NOTEXISTED));
+        fileService.deleteFile(resume.getUrl(), "resume");
         resumeRepository.delete(resume);
     }
 

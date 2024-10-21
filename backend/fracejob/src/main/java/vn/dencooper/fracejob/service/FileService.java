@@ -47,6 +47,15 @@ public class FileService {
         return finalName;
     }
 
+    public void deleteFile(String fileName, String folder) throws URISyntaxException, IOException {
+        URI uri = new URI(baseURI + folder + "/" + fileName);
+        Path path = Paths.get(uri);
+
+        if (Files.exists(path)) {
+            Files.delete(path);
+        }
+    }
+
     public long getFileLength(String fileName, String folder) throws URISyntaxException {
         URI uri = new URI(baseURI + folder + "/" + fileName);
         Path path = Paths.get(uri);
