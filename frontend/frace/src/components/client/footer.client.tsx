@@ -1,5 +1,5 @@
-import { Button, Col, Flex, Form, Modal, Row, Select, Table, Tabs, message, notification } from "antd";
-
+import { Col, Flex, Form, Modal, Row, Select, Table, Tabs, message, notification } from "antd";
+import { Link } from "react-router-dom";
 const Footer = () => {
     return (
         <footer >
@@ -11,10 +11,10 @@ const Footer = () => {
                     <Col span={8}>
                         <h2>Về Chúng Tôi</h2>
                         <Flex gap='middle' vertical style={{ fontSize: 16, textAlign: 'center', marginTop: 10 }}>
-                            <span>Trang chủ</span>
+                            <span><Link to={'/'} style={{ color: 'rgb(167, 167, 167)' }}>Trang Chủ</Link></span>
                             <span>Về chúng tôi</span>
                             <span>Liên hệ</span>
-                            <span>Công việc</span>
+                            <span><Link to={'/job'} style={{ color: 'rgb(167, 167, 167)' }}>Công việc</Link></span>
                         </Flex>
 
                     </Col>
